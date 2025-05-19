@@ -1,5 +1,6 @@
+"use client";
 import Image from "next/image";
-import { Calendar, MapPin, MessageSquare, Users } from "lucide-react";
+import { Calendar, Contact, MapPin, MessageSquare, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,8 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { initData } from "@/lib/constant";
 import Link from "next/link";
+import { contact } from "@/lib/constant";
 
 export default function Home() {
   return (
@@ -82,9 +83,11 @@ export default function Home() {
               <p>Share your prayer needs with our church community.</p>
             </CardContent>
             <CardFooter>
-              <Button variant="secondary" className="w-full">
-                Submit Request
-              </Button>
+              <Link href="/prayer-request" passHref className="w-full">
+                <Button variant="secondary" className="w-full">
+                  Submit Request
+                </Button>
+              </Link>
             </CardFooter>
           </Card>
 
@@ -147,7 +150,7 @@ export default function Home() {
             <div className="md:w-1/3">
               <div className="relative w-64 h-64 mx-auto">
                 <Image
-                  src="/images/vicar.png"
+                  src="/Rev Lijo Chacko.jpg"
                   alt="Vicar of Mar Thoma Church Sydney"
                   fill
                   className="object-cover rounded-full border-4 border-accent"
@@ -216,21 +219,35 @@ export default function Home() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <Link href={"https://maps.app.goo.gl/sx7P4eyy4P4A6xXv9"}>
-                    <p className="font-medium">
-                      {initData.contact.addressTitle}
-                    </p>
-                    <p>{initData.contact.address.map((line) => line)}</p>
+                  <Link href={contact.mapLink} target="_blank">
+                    <p className="font-medium">{contact.addressTitle}</p>
+                    {contact.address.map((line) => (
+                      <p key={line} className="text-primary underline">
+                        {line}
+                      </p>
+                    ))}
                   </Link>
-                  <Separator className="my-4" />
-                  <div>
-                    <p className="font-medium">Contact</p>
-                    <p>Phone: {initData.contact.phone}</p>
-                    <p>Email: info@marthomachurchsydney.org</p>
-                  </div>
+                </CardContent>
+                <Separator className="my-4" />
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Contact size={20} className="text-primary" />
+                    Contact
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>Phone: {contact.phone}</p>
+                  <p>Email: {contact.email}</p>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full">Get Directions</Button>
+                  <Link
+                    className="w-full"
+                    href={contact.mapLink}
+                    target="_blank"
+                    passHref
+                  >
+                    <Button className="w-full">Get Directions</Button>
+                  </Link>
                 </CardFooter>
               </Card>
             </div>

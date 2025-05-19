@@ -1,35 +1,21 @@
-import type React from "react";
+import {
+  Facebook,
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  Youtube,
+} from "lucide-react";
 import type { Metadata } from "next";
 import { Cinzel, Lato } from "next/font/google";
 import Link from "next/link";
-import {
-  Menu,
-  Facebook,
-  Instagram,
-  Youtube,
-  Phone,
-  Mail,
-  MapPin,
-} from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import type React from "react";
 import { Separator } from "@/components/ui/separator";
-
-import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import Image from "next/image";
-import { initData, navigationMenu } from "@/lib/constant";
+import "./globals.css";
 import { MenuBar } from "./MenuBar";
+import { contact } from "@/lib/constant";
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -105,35 +91,7 @@ function Footer() {
   return (
     <footer className="bg-primary text-primary-foreground py-12">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <h3 className="text-xl font-cinzel font-bold mb-4">
-              Mar Thoma Church
-            </h3>
-            <p className="mb-4">
-              A community of faith, hope, and love in Sydney, Australia.
-            </p>
-            <div className="flex gap-4">
-              <Link
-                href="#"
-                className="text-primary-foreground hover:text-accent transition-colors"
-              >
-                <Facebook className="h-5 w-5" />
-              </Link>
-              <Link
-                href="#"
-                className="text-primary-foreground hover:text-accent transition-colors"
-              >
-                <Instagram className="h-5 w-5" />
-              </Link>
-              <Link
-                href="#"
-                className="text-primary-foreground hover:text-accent transition-colors"
-              >
-                <Youtube className="h-5 w-5" />
-              </Link>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-lg font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
@@ -186,20 +144,42 @@ function Footer() {
           </div>
           <div>
             <h3 className="text-lg font-bold mb-4">Contact Us</h3>
-            <address className="not-italic space-y-2">
+            <div className="not-italic space-y-2">
               <p className="flex items-center gap-2">
                 <MapPin size={16} />
-                123 Church Street, Sydney, NSW 2000
+                <Link href={contact.mapLink} target="_blank">
+                  {contact.address.join(" ")}
+                </Link>
               </p>
               <p className="flex items-center gap-2">
                 <Phone size={16} />
-                (02) 1234 5678
+                {contact.phone}
               </p>
               <p className="flex items-center gap-2">
                 <Mail size={16} />
-                info@marthomachurchsydney.org
+                {contact.email}
               </p>
-            </address>
+            </div>
+            <div className="mt-4 flex gap-4">
+              <Link
+                href="#"
+                className="text-primary-foreground hover:text-accent transition-colors"
+              >
+                <Facebook className="h-5 w-5" />
+              </Link>
+              <Link
+                href="#"
+                className="text-primary-foreground hover:text-accent transition-colors"
+              >
+                <Instagram className="h-5 w-5" />
+              </Link>
+              <Link
+                href="#"
+                className="text-primary-foreground hover:text-accent transition-colors"
+              >
+                <Youtube className="h-5 w-5" />
+              </Link>
+            </div>
           </div>
         </div>
         <Separator className="my-8 bg-primary-foreground/20" />

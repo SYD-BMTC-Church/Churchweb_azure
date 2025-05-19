@@ -29,49 +29,57 @@ export function MenuBar() {
                   <NavigationMenuTrigger>{item.label}</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
-                      {/* First item gets special styling */}
-                      <li className="row-span-3">
-                        <NavigationMenuLink asChild>
-                          <Link
-                            href={item.subMenu[0].url}
-                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-primary/50 to-primary p-6 no-underline outline-none focus:shadow-md"
-                          >
-                            <div className="mt-4 mb-2 text-lg font-medium text-primary-foreground">
-                              {item.subMenu[0].label}
-                            </div>
-                            <p className="text-sm leading-tight text-primary-foreground/90">
-                              {item.subMenu[0].description}
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                      {/* Remaining submenu items */}
-                      {item.subMenu.slice(1).map((subItem) => (
-                        <li key={subItem.label}>
-                          <NavigationMenuLink asChild>
-                            <Link
-                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                              href={subItem.url}
-                            >
-                              <div className="text-sm font-medium leading-none">
-                                {subItem.label}
-                              </div>
-                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                {subItem.description}
-                              </p>
-                            </Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
+                      {item.subMenu.map((subItem) =>
+                        subItem.special ? (
+                          <li key={subItem.label} className="row-span-3">
+                            <NavigationMenuLink asChild>
+                              <Link
+                                href={subItem.url}
+                                className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-primary/50 to-primary p-6 no-underline outline-none focus:shadow-md"
+                              >
+                                <div className="mt-4 mb-2 text-lg font-medium text-primary-foreground">
+                                  {subItem.label}
+                                </div>
+                                {subItem.description != undefined && (
+                                  <p className="text-sm leading-tight text-primary-foreground/90">
+                                    {subItem.description}
+                                  </p>
+                                )}
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        ) : (
+                          <li key={subItem.label}>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                href={subItem.url}
+                              >
+                                <div className="text-sm font-medium leading-none">
+                                  {subItem.label}
+                                </div>
+                                <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                                  {subItem.description}
+                                </p>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        )
+                      )}
                     </ul>
                   </NavigationMenuContent>
                 </>
               ) : (
                 <NavigationMenuLink
+                  key={item.label}
                   className={navigationMenuTriggerStyle()}
                   asChild
                 >
-                  <Link href={item.url}>{item.label}</Link>
+                  {item?.render != undefined ? (
+                    item.render()
+                  ) : (
+                    <Link href={item.url || ""}>{item.label}</Link>
+                  )}
                 </NavigationMenuLink>
               )}
             </NavigationMenuItem>
@@ -92,6 +100,7 @@ export function MenuBar() {
             {navigationMenu.map((item, index) => (
               <React.Fragment key={item.label}>
                 <Link
+                  key={item.label}
                   href={item.url || ""}
                   className="ml-4 text-md font-medium hover:text-primary transition-colors"
                 >
