@@ -59,6 +59,5 @@ export async function GET() {
       copyright: "© 2025 Mar Thoma Church Sydney. All rights reserved.",
     },
   };
-
-  return NextResponse.json(data);
+  return NextResponse.json(data, { status: 200 });
 }

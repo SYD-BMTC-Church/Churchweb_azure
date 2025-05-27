@@ -66,7 +66,7 @@ function Header() {
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 flex items-center justify-center">
               <Image
-                src="/logo.png"
+                src="/images/logo.png"
                 alt="Mar Thoma Church Logo"
                 width={100}
                 height={100}

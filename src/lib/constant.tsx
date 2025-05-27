@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Calendar, HeartHandshake, MessageSquare, Users } from "lucide-react";
 import Link from "next/link";
 
 export const navigationMenu: {
@@ -24,16 +25,22 @@ export const navigationMenu: {
         special: true,
       },
       {
-        label: "History",
-        url: "/about",
+        label: "Mission & Vision",
+        url: "/about#mission-vision",
         description:
-          "Learn about our History, Mission & Vision, Beliefs and Leadership.",
+          "Discover our Mission & Vision, guiding our community and outreach.",
       },
       {
-        label: "About Us",
-        url: "/about",
+        label: "Beliefs",
+        url: "/about#beliefs",
         description:
-          "Learn about our History, Mission & Vision, Beliefs and Leadership.",
+          "Explore our core beliefs and values that shape our faith community.",
+      },
+      {
+        label: "Leadership",
+        url: "/about#leadership",
+        description:
+          "Meet our dedicated leaders who guide and support our church community.",
       },
     ],
   },
@@ -71,3 +78,21 @@ export const contact = {
   phone: "+61297035651",
   email: "info@marthomachurchsydney.org",
 };
+
+export const requestForms = [
+  {
+    title: "New Here?",
+    link: "/new-here",
+    content:
+      "Welcome to our church family. Find out what to expect on your first visit.",
+    icon: <Users size={24} />,
+    buttonLabel: "Get in Touch",
+  },
+  {
+    title: "Prayer Request",
+    link: "/prayer-request",
+    content: "Share your prayer needs with our church community.",
+    icon: <HeartHandshake size={24} />,
+    buttonLabel: "Submit Request",
+  },
+];
