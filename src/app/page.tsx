@@ -1,7 +1,5 @@
 "use client";
-import Image from "next/image";
-import { Contact, MapPin } from "lucide-react";
-import { compile } from "@mdx-js/mdx";
+import HeroSection from "@/components/heroSection";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,83 +10,94 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
-import { contact, requestForms } from "@/lib/constant";
+import { requestForms } from "@/lib/constant";
 import MDXRenderer from "@/lib/mdx-helper";
+import axios from "axios";
+import { Contact, MapPin } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [markdown, setMarkdown] = useState<string>("");
+  const [MessagefromtheVicar, setMessagefromtheVicar] = useState<{
+    message: string | undefined;
+    image: string | undefined;
+  }>({
+    message: undefined,
+    image: undefined,
+  });
+  const [contact, setContact] = useState<{
+    addressTitle: string;
+    mapLink: string;
+    address: string;
+    phone: string;
+    email: string;
+  }>({
+    addressTitle: "",
+    mapLink: "",
+    address: "",
+    phone: "",
+    email: "",
+  });
 
   useEffect(() => {
-    // Simulate fetching markdown content from an API or server
-    const fetchMarkdown = async () => {
-      const markdownContent = `
-              > In the 30 years since its formation, the Bethel Mar Thoma
-                Parish has witnessed and established one of the most influential
-                diasporas in Sydney. The unique identity as an 'Eastern Reformed
-                Church', in the traditional lineage of Syrian Christian
-                Churches, the Mar Thoma Church stands closer to both
-                traditionalists and Evangelicals. The Mar Thoma church is
-                evangelical in its faith, traditional in its framework and
-                missional in its reflections. As long as faith keeps us
-                inspired, challenged and motivated, we will eliminate divisions
-                to develop strong bonds and nurture relationships. Sydney has
-                become the preferred destination for people from South East
-                Asia, as the government respects multicultural migrants and the
-                country becomes polyphonic.
-
-                <p className="text-right font-semibold">— Rev. Dr. Thomas Mathew</p>
-      `;
-      setMarkdown(markdownContent);
-    };
-
     fetchMarkdown();
+    getContactDetails();
   }, []);
+
+  const fetchMarkdown = async () => {
+    await axios.get("/api/home").then((response) => {
+      console.log("Response from /api/home:", response.data[0]);
+      if (response.data && response.data[0] && response.data[0]) {
+        setMessagefromtheVicar({
+          message: response.data[0].Message,
+          image: response.data[0].Image,
+        });
+      } else {
+        console.error("No markdown content found in response");
+      }
+    });
+  };
+
+  const getContactDetails = async () => {
+    await axios.get("/api/contact-details").then((response) => {
+      console.log("Response from /api/home:", response.data[0]);
+      if (response.data && response.data[0] && response.data[0]) {
+        setContact(response.data[0]);
+      } else {
+        console.error("No markdown content found in response");
+      }
+    });
+  };
   return (
     <main className="flex min-h-screen flex-col">
       {/* Hero Section */}
-      <section className="relative h-[70vh] w-full">
-        <div className="absolute inset-0 bg-black/40 z-10" />
-        <Image
-          src="/images/church1.jpeg"
-          alt="Mar Thoma Church Sydney"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="relative z-20 container mx-auto h-full flex flex-col items-center justify-center text-center text-white">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            Mar Thoma Church Sydney
-          </h1>
-          <p className="text-xl md:text-2xl max-w-2xl mx-auto mb-8">
-            A community of faith, hope, and love
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button
-              size="lg"
-              className="bg-white text-primary hover:bg-white/90"
-            >
-              Sunday Service Times
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-zinc-600 border-white hover:bg-zinc-300"
-            >
-              Learn More
-            </Button>
-          </div>
+      <HeroSection
+        imageSrc="/images/church1.jpeg"
+        altText="Mar Thoma Church Sydney"
+        title="Welcome to Mar Thoma Church Sydney"
+        subText="A community of faith, hope, and love"
+      >
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Button size="lg" className="bg-white text-primary hover:bg-white/90">
+            Sunday Service Times
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="text-zinc-600 border-white hover:bg-zinc-300"
+          >
+            Learn More
+          </Button>
         </div>
-      </section>
+      </HeroSection>
 
       {/* Quick Links Section */}
-      <section className="py-12 bg-primary text-primary-foreground">
+      <section className="py-12 text-primary-foreground bg-primary/10">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
           {requestForms.map((form, index) => (
             <Card
               key={index}
-              className="bg-primary-foreground/10 border-none text-primary-foreground hover:bg-primary-foreground/20 transition-colors"
+              className="bg-primary border-none text-primary-foreground transition-colors"
             >
               <CardHeader className="flex flex-row items-center gap-4">
                 {form.icon}
@@ -150,10 +159,9 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="md:w-1/3">
               <div className="relative w-64 h-64 mx-auto">
-                <Image
-                  src="/images/Rev Lijo Chacko.jpg"
-                  alt="Vicar of Mar Thoma Church Sydney"
-                  fill
+                <img
+                  src={MessagefromtheVicar.image}
+                  alt="Message from the Vicar"
                   className="object-cover rounded-full border-4 border-accent"
                 />
               </div>
@@ -162,10 +170,10 @@ export default function Home() {
               <h2 className="text-3xl font-bold mb-6 text-primary">
                 Message from the Vicar
               </h2>
-              <MDXRenderer markdown={markdown} />
-              <div className="mt-6">
+              <MDXRenderer markdown={MessagefromtheVicar.message} />
+              {/* <div className="mt-6">
                 <Button>Read Full Message</Button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -205,9 +213,9 @@ export default function Home() {
                 <CardContent className="space-y-4">
                   <Link href={contact.mapLink} target="_blank">
                     <p className="font-medium">{contact.addressTitle}</p>
-                    {contact.address.map((line) => (
+                    {contact.address.split(", ").map((line) => (
                       <p key={line} className="text-primary underline">
-                        {line}
+                        {line},
                       </p>
                     ))}
                   </Link>

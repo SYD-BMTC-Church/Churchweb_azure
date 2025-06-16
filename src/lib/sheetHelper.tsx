@@ -1,23 +1,19 @@
 "use server";
 import { google } from "googleapis";
 
-function GetSheetTemplate(data: any) {
-  const rows = data;
-  const title = rows[0];
-  rows.shift();
-  let newData: any = [];
-  if (rows.length) {
-    rows.map((row: any) => {
-      const temp: { [key: string]: any } = {};
-      row.map((item: any, index: any) => (temp[title[index]] = item));
-      newData.push(temp);
-    });
-    return newData;
-  }
+function SheetDataToJson(data: any[][]) {
+  if (!Array.isArray(data) || data.length < 2) return [];
+  const [title, ...rows] = data;
+  return rows.map((row) =>
+    Object.fromEntries(row.map((item, idx) => [title[idx], item]))
+  );
 }
 
+let cachedAuth: any = null;
+
 async function getGlSheetAuth() {
-  return await google.auth.getClient({
+  if (cachedAuth) return cachedAuth;
+  cachedAuth = await google.auth.getClient({
     projectId: process.env.GOOGLE_PROJECT_ID,
     credentials: {
       type: "service_account",
@@ -29,6 +25,7 @@ async function getGlSheetAuth() {
     },
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
   });
+  return cachedAuth;
 }
 
 export async function updateData(
@@ -55,23 +52,6 @@ export async function updateData(
   }
 }
 
-// export async function appendData(jwt: any, value: any, sheetName = "Sheet1") {
-//   try {
-//     const sheets = google.sheets({ version: "v4", auth: jwt });
-//     await sheets.spreadsheets.values.append({
-//       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-//       range: sheetName,
-//       valueInputOption: "USER_ENTERED",
-//       requestBody: {
-//         values: [JSON.parse(value)],
-//       },
-//     });
-//     return { sucess: sheetName };
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
-
 export async function appendData(rowData: any, sheetName = "Sheet1") {
   // Append data to the sheet
   try {
@@ -93,13 +73,17 @@ export async function appendData(rowData: any, sheetName = "Sheet1") {
   }
 }
 
-export async function getData(sheet = "Sheet1") {
-  const auth = await getGlSheetAuth();
-  const sheets = google.sheets({ version: "v4", auth: auth });
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-    range: sheet.toString(), // sheet name
-  });
-  const data = GetSheetTemplate(response.data.values);
-  return data;
+export async function getAllFromSheet(sheet = "Sheet1") {
+  try {
+    const auth = await getGlSheetAuth();
+    const sheets = google.sheets({ version: "v4", auth });
+    const { data } = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+      range: sheet,
+    });
+    return SheetDataToJson(data.values ?? []);
+  } catch (error) {
+    console.error("Failed to fetch sheet data:", error);
+    return [];
+  }
 }

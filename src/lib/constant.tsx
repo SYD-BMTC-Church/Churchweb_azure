@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Calendar, HeartHandshake, MessageSquare, Users } from "lucide-react";
+import { HeartHandshake, Users } from "lucide-react";
 import Link from "next/link";
 
 export const navigationMenu: {
@@ -38,7 +38,7 @@ export const navigationMenu: {
       },
       {
         label: "Leadership",
-        url: "/about#leadership",
+        url: "/leadership",
         description:
           "Meet our dedicated leaders who guide and support our church community.",
       },
@@ -65,19 +65,11 @@ export const navigationMenu: {
     label: "Donate",
     render: () => (
       <Button>
-        <Link href="/Donate">Donate</Link>
+        <Link href="https://sydneymarthomachurch.square.site/">Donate</Link>
       </Button>
     ),
   },
 ];
-
-export const contact = {
-  addressTitle: "Bethel Mar Thoma Church",
-  mapLink: "https://maps.app.goo.gl/sx7P4eyy4P4A6xXv9",
-  address: ["1650 The Horsley Dr,", "Horsley Park NSW 2175,", "Australia"],
-  phone: "+61297035651",
-  email: "info@marthomachurchsydney.org",
-};
 
 export const requestForms = [
   {
@@ -94,5 +86,38 @@ export const requestForms = [
     content: "Share your prayer needs with our church community.",
     icon: <HeartHandshake size={24} />,
     buttonLabel: "Submit Request",
+  },
+];
+
+export const committeeMembers = [
+  {
+    name: "John Abraham",
+    role: "Secretary",
+    image: "/images/committee-1.png",
+  },
+  {
+    name: "Sarah Thomas",
+    role: "Treasurer",
+    image: "/images/committee-2.png",
+  },
+  {
+    name: "Jacob Mathew",
+    role: "Trustee",
+    image: "/images/committee-3.png",
+  },
+  {
+    name: "Rachel Philip",
+    role: "Sunday School Director",
+    image: "/images/committee-4.png",
+  },
+  {
+    name: "Samuel George",
+    role: "Youth Fellowship President",
+    image: "/images/committee-5.png",
+  },
+  {
+    name: "Elizabeth Varghese",
+    role: "Women's Fellowship President",
+    image: "/images/committee-6.png",
   },
 ];

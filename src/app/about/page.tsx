@@ -1,34 +1,23 @@
+import { BookOpen, Clock, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, Clock, Heart, BookOpen, Users } from "lucide-react";
 
+import HeroSection from "@/components/heroSection";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
 
 export default function AboutPage() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[40vh] w-full">
-        <div className="absolute inset-0 bg-black/50 z-10" />
-        <Image
-          src="/images/church-interior.png"
-          alt="Mar Thoma Church Sydney Interior"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="relative z-20 container mx-auto h-full flex flex-col items-center justify-center text-center text-white">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            About Our Church
-          </h1>
-          <p className="text-lg md:text-xl max-w-2xl mx-auto">
-            Learn about our history, mission, and beliefs
-          </p>
-        </div>
-      </section>
+      <HeroSection
+        imageSrc="/images/church-interior.png"
+        altText="Mar Thoma Church Sydney Interior"
+        title="About Our Church"
+        subText="Learn about our history, mission, and beliefs"
+      />
 
       {/* Breadcrumb */}
       <div className="bg-muted/50 py-3">
@@ -45,7 +34,7 @@ export default function AboutPage() {
       {/* Navigation Links */}
       <div className="sticky top-[73px] bg-background z-30 border-b">
         <div className="container mx-auto py-4">
-          <div className="flex justify-center space-x-6 overflow-x-auto">
+          <div className="flex justify-center space-x-2 overflow-x-auto">
             <a
               href="#history"
               className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-muted transition-colors"
@@ -54,11 +43,11 @@ export default function AboutPage() {
               <span>History</span>
             </a>
             <a
-              href="#mission"
+              href="#mission-vision"
               className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-muted transition-colors"
             >
               <Heart className="h-4 w-4" />
-              <span>Mission & Vision</span>
+              <span>Mission</span>
             </a>
             <a
               href="#beliefs"
@@ -66,13 +55,6 @@ export default function AboutPage() {
             >
               <BookOpen className="h-4 w-4" />
               <span>Beliefs</span>
-            </a>
-            <a
-              href="#leadership"
-              className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-muted transition-colors"
-            >
-              <Users className="h-4 w-4" />
-              <span>Leadership</span>
             </a>
           </div>
         </div>
@@ -131,7 +113,7 @@ export default function AboutPage() {
         <Separator className="my-16" />
 
         {/* Mission & Vision Section */}
-        <section id="mission" className="scroll-mt-40 mb-16">
+        <section id="mission-vision" className="scroll-mt-40 mb-16">
           <div className="flex items-center gap-3 mb-6">
             <Heart className="h-6 w-6 text-primary" />
             <h2 className="text-3xl font-bold text-primary">
@@ -263,124 +245,7 @@ export default function AboutPage() {
             </CardContent>
           </Card>
         </section>
-
-        <Separator className="my-16" />
-
-        {/* Leadership Section */}
-        <section id="leadership" className="scroll-mt-40">
-          <div className="flex items-center gap-3 mb-6">
-            <Users className="h-6 w-6 text-primary" />
-            <h2 className="text-3xl font-bold text-primary">Our Leadership</h2>
-          </div>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="mb-8">
-                <h3 className="text-xl font-bold mb-4">Current Vicar</h3>
-                <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
-                  <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-primary/20">
-                    <Image
-                      src="/images/vicar.png"
-                      alt="Rev. Lijo Chacko"
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-bold">Rev. Lijo Chacko</h4>
-                    <p className="text-muted-foreground mb-4">
-                      Vicar (2020 - Present)
-                    </p>
-                    <p className="mb-4">
-                      Rev. Dr. Thomas Mathew has been serving as the vicar of
-                      Mar Thoma Church Sydney since 2020. He holds a Doctorate
-                      in Theology from Oxford University and has served in
-                      parishes across India and the Middle East before coming to
-                      Australia.
-                    </p>
-                    <p>
-                      Under his leadership, our church has strengthened its
-                      community outreach programs and youth ministries. His
-                      passion for biblical teaching and pastoral care has been a
-                      blessing to our congregation.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <Separator className="my-8" />
-
-              <div>
-                <h3 className="text-xl font-bold mb-4">Church Committee</h3>
-                <p className="mb-6">
-                  Our church is governed by an elected committee that works
-                  alongside the vicar to oversee the spiritual and
-                  administrative affairs of the parish.
-                </p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {committeeMembers.map((member, index) => (
-                    <div key={index} className="flex items-center gap-4">
-                      <div className="relative w-16 h-16 rounded-full overflow-hidden bg-muted">
-                        <Image
-                          src={member.image || "/placeholder.svg"}
-                          alt={member.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      <div>
-                        <h4 className="font-bold">{member.name}</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {member.role}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-8">
-                  <Link href="/about/former-vicars">
-                    <Button>View Former Vicars</Button>
-                  </Link>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
       </div>
     </main>
   );
 }
-
-const committeeMembers = [
-  {
-    name: "John Abraham",
-    role: "Secretary",
-    image: "/images/committee-1.png",
-  },
-  {
-    name: "Sarah Thomas",
-    role: "Treasurer",
-    image: "/images/committee-2.png",
-  },
-  {
-    name: "Jacob Mathew",
-    role: "Trustee",
-    image: "/images/committee-3.png",
-  },
-  {
-    name: "Rachel Philip",
-    role: "Sunday School Director",
-    image: "/images/committee-4.png",
-  },
-  {
-    name: "Samuel George",
-    role: "Youth Fellowship President",
-    image: "/images/committee-5.png",
-  },
-  {
-    name: "Elizabeth Varghese",
-    role: "Women's Fellowship President",
-    image: "/images/committee-6.png",
-  },
-];

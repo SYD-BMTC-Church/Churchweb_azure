@@ -5,7 +5,7 @@ import { Fragment, useEffect, useState } from "react";
 import * as runtime from "react/jsx-runtime";
 
 interface MDXRendererProps {
-  markdown: string;
+  markdown: string | undefined;
 }
 
 export default function MDXRenderer({ markdown }: MDXRendererProps) {
@@ -14,6 +14,16 @@ export default function MDXRenderer({ markdown }: MDXRendererProps) {
   useEffect(() => {
     (async () => {
       try {
+        if (markdown === undefined) {
+          console.warn("No markdown content provided");
+          return;
+        }
+        // Ensure markdown is a string
+        if (typeof markdown !== "string") {
+          console.error("Markdown content is not a string:", markdown);
+          return;
+        }
+        // Compile the markdown to MDX
         const compiledCode = await compile(markdown, {
           outputFormat: "function-body",
         });
@@ -23,13 +33,22 @@ export default function MDXRenderer({ markdown }: MDXRendererProps) {
         setContent(() => (props: any) => (
           <MDXContent
             {...props}
-            components={{
-              blockquote: ({ children }: { children: React.ReactNode }) => (
-                <blockquote className="text-lg italic border-l-4 border-accent pl-4 mb-6">
-                  {children}
-                </blockquote>
-              ),
-            }}
+            components={
+              {
+                // blockquote: ({ children }: { children: React.ReactNode }) => (
+                //   <blockquote className="text-lg italic border-l-4 border-accent pl-4 mb-6">
+                //     {children}
+                //   </blockquote>
+                // ),
+                // image to NextJS Image component
+                // img: ({ src, alt, ...props }: { src: string; alt?: string }) => (
+                //   <img
+                //     src={src}
+                //     alt={alt}
+                //     className="rounded-lg shadow-md mb-4"
+                //     {...props}
+              }
+            }
           />
         ));
       } catch (error) {

@@ -1,8 +1,3 @@
-import React from "react";
-import Link from "next/link";
-import { Menu } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,9 +7,26 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
 import { navigationMenu } from "@/lib/constant";
+import { ChevronDown } from "lucide-react";
+import Link from "next/link";
+
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 
 export function MenuBar() {
   return (
@@ -86,32 +98,56 @@ export function MenuBar() {
           ))}
         </NavigationMenuList>
       </NavigationMenu>
-
-      {/* Mobile Navigation */}
-      <Sheet>
-        <SheetTrigger asChild className="md:hidden">
-          <Button variant="ghost" size="icon">
-            <Menu className="h-6 w-6" />
-            <span className="sr-only">Toggle menu</span>
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="right">
-          <div className="grid gap-4 py-4">
+      {/* Mobile Navigation - Sidebar */}
+      <SidebarProvider className="w-auto min-h-auto md:hidden">
+        <SidebarTrigger />
+        <Sidebar side="right">
+          <SidebarContent className="p-8">
             {navigationMenu.map((item, index) => (
-              <React.Fragment key={item.label}>
-                <Link
-                  key={item.label}
-                  href={item.url || ""}
-                  className="ml-4 text-md font-medium hover:text-primary transition-colors"
-                >
-                  {item.label}
-                </Link>
-                {index < navigationMenu.length - 1 && <Separator />}
-              </React.Fragment>
+              <SidebarMenu key={index}>
+                {item.subMenu ? (
+                  <Collapsible className="group/collapsible">
+                    <SidebarGroup>
+                      <SidebarGroupLabel asChild>
+                        <CollapsibleTrigger className="h-12 text-base font-medium hover:bg-primary content-center text-sidebar-accent-foreground">
+                          {item.label}
+                          <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                        </CollapsibleTrigger>
+                      </SidebarGroupLabel>
+                      <CollapsibleContent>
+                        <SidebarMenu>
+                          {item.subMenu.map((subItem) => (
+                            <SidebarMenuItem key={subItem.label}>
+                              <SidebarMenuButton asChild>
+                                <a href={subItem.url}>{subItem.label}</a>
+                              </SidebarMenuButton>
+                            </SidebarMenuItem>
+                          ))}
+                        </SidebarMenu>
+                      </CollapsibleContent>
+                    </SidebarGroup>
+                  </Collapsible>
+                ) : (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      className="h-12 px-4 text-base font-medium hover:bg-primary/10"
+                    >
+                      {item?.render !== undefined ? (
+                        item.render()
+                      ) : (
+                        <Link href={item.url || ""} className="w-full">
+                          {item.label}
+                        </Link>
+                      )}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
+              </SidebarMenu>
             ))}
-          </div>
-        </SheetContent>
-      </Sheet>
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>
     </>
   );
 }

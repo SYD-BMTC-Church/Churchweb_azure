@@ -1,12 +1,12 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { ChevronRight, Send, Lock } from "lucide-react";
 
+import { Lock, Send } from "lucide-react";
+
+import HeroSection from "@/components/heroSection";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,13 +15,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
-import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function PrayerRequestPage() {
   const [formState, setFormState] = useState({
@@ -114,24 +113,12 @@ export default function PrayerRequestPage() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[40vh] w-full">
-        <div className="absolute inset-0 bg-black/50 z-10" />
-        <Image
-          src="/images/church-altar.png"
-          alt="Mar Thoma Church Sydney Altar"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="relative z-20 container mx-auto h-full flex flex-col items-center justify-center text-center text-white">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Prayer Request
-          </h1>
-          <p className="text-lg md:text-xl max-w-2xl mx-auto">
-            Share your prayer needs with our church community
-          </p>
-        </div>
-      </section>
+      <HeroSection
+        imageSrc="/images/church-altar.png"
+        altText="Mar Thoma Church Sydney Altar"
+        title="Prayer Request"
+        subText="Share your prayer needs with our church community"
+      />
 
       {/* Breadcrumb */}
       <div className="bg-muted/50 py-3">
