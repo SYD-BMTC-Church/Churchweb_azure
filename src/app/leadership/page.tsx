@@ -1,11 +1,11 @@
 "use client";
+import React, { Suspense, useEffect, useState } from "react";
 import HeroSection from "@/components/heroSection";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Church, UserRound, Users } from "lucide-react";
 import Image from "next/image";
-import { Suspense, useEffect, useState } from "react";
 import FormerVicarsPage from "./formerVicarsPage";
 import axios from "axios";
 interface CommitteeMember {
@@ -14,7 +14,7 @@ interface CommitteeMember {
   role: string;
   image: string;
 }
-export default function page() {
+export default function Page() {
   const [committeeMembers, setCommitteeMembers] = useState<CommitteeMember[]>(
     []
   );

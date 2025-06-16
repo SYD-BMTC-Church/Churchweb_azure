@@ -143,13 +143,13 @@ export default function PrayerRequestPage() {
         <div className="container mx-auto">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-primary mb-6">
-              We're Here to Pray With You
+              We&apos;re Here to Pray With You
             </h2>
             <blockquote className="text-xl italic mb-8">
-              "Do not be anxious about anything, but in every situation, by
+              &quot;Do not be anxious about anything, but in every situation, by
               prayer and petition, with thanksgiving, present your requests to
               God. And the peace of God, which transcends all understanding,
-              will guard your hearts and your minds in Christ Jesus."
+              will guard your hearts and your minds in Christ Jesus.&quot;
             </blockquote>
             <p className="text-lg font-semibold">Philippians 4:6-7</p>
             <Separator className="mx-auto w-24 my-6" />

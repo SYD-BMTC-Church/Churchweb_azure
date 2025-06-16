@@ -14,6 +14,7 @@ import { requestForms } from "@/lib/constant";
 import MDXRenderer from "@/lib/mdx-helper";
 import axios from "axios";
 import { Contact, MapPin } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -159,11 +160,17 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="md:w-1/3">
               <div className="relative w-64 h-64 mx-auto">
-                <img
-                  src={MessagefromtheVicar.image}
-                  alt="Message from the Vicar"
-                  className="object-cover rounded-full border-4 border-accent"
-                />
+                {MessagefromtheVicar.image ? (
+                  <Image
+                    src={MessagefromtheVicar.image}
+                    alt="Message from the Vicar"
+                    className="object-cover rounded-full border-4 border-accent"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority
+                    loading="lazy"
+                  />
+                ) : null}
               </div>
             </div>
             <div className="md:w-2/3">

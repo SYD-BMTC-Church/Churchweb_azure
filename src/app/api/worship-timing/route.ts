@@ -1,11 +1,6 @@
-// Example API route (pages/api/sunday-worship.ts)
+import { NextRequest, NextResponse } from "next/server";
 
-import type { NextApiRequest, NextApiResponse } from "next";
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function GET(req: NextRequest) {
   const calendarId = process.env.GOOGLE_CALENDAR_ID!;
   const apiKey = process.env.GOOGLE_API_KEY!;
 
@@ -32,9 +27,12 @@ export default async function handler(
       end: event.end?.dateTime || event.end?.date,
     }));
 
-    res.status(200).json({ sunday: simplified });
+    return NextResponse.json({ sunday: simplified });
   } catch (err) {
     console.error("Failed to fetch public calendar:", err);
-    res.status(500).json({ error: "Could not fetch events" });
+    return NextResponse.json(
+      { error: "Could not fetch events" },
+      { status: 500 }
+    );
   }
 }

@@ -1,7 +1,7 @@
 "use server";
 import { google } from "googleapis";
 
-function SheetDataToJson(data: any[][]) {
+function SheetDataToJson(data: string[][]) {
   if (!Array.isArray(data) || data.length < 2) return [];
   const [title, ...rows] = data;
   return rows.map((row) =>

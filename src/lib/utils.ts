@@ -6,6 +6,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function htmlDecode(input: string) {
-  var doc = new DOMParser().parseFromString(input, "text/html");
+  const doc = new DOMParser().parseFromString(input, "text/html");
   return doc.documentElement.textContent;
 }

@@ -30,27 +30,31 @@ export default function MDXRenderer({ markdown }: MDXRendererProps) {
         const mdxModule = await run(String(compiledCode), runtime);
         const MDXContent = mdxModule.default || Fragment;
 
-        setContent(() => (props: any) => (
-          <MDXContent
-            {...props}
-            components={
-              {
-                // blockquote: ({ children }: { children: React.ReactNode }) => (
-                //   <blockquote className="text-lg italic border-l-4 border-accent pl-4 mb-6">
-                //     {children}
-                //   </blockquote>
-                // ),
-                // image to NextJS Image component
-                // img: ({ src, alt, ...props }: { src: string; alt?: string }) => (
-                //   <img
-                //     src={src}
-                //     alt={alt}
-                //     className="rounded-lg shadow-md mb-4"
-                //     {...props}
+        setContent(() => {
+          const AnonymousMDXComponent = (props: any) => (
+            <MDXContent
+              {...props}
+              components={
+                {
+                  // blockquote: ({ children }: { children: React.ReactNode }) => (
+                  //   <blockquote className="text-lg italic border-l-4 border-accent pl-4 mb-6">
+                  //     {children}
+                  //   </blockquote>
+                  // ),
+                  // image to NextJS Image component
+                  // img: ({ src, alt, ...props }: { src: string; alt?: string }) => (
+                  //   <img
+                  //     src={src}
+                  //     alt={alt}
+                  //     className="rounded-lg shadow-md mb-4"
+                  //     {...props}
+                }
               }
-            }
-          />
-        ));
+            />
+          );
+          AnonymousMDXComponent.displayName = "AnonymousMDXComponent";
+          return AnonymousMDXComponent;
+        });
       } catch (error) {
         console.error("Error compiling MDX:", error);
       }

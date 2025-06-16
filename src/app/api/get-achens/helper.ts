@@ -1,6 +1,13 @@
 import { parse } from "node-html-parser";
 import axios from "axios";
-
+interface AchenDetails {
+  name: string;
+  img: string;
+  address: string;
+  phone: string;
+  email: string;
+  designation: string;
+}
 export default async function getAchens() {
   try {
     const achensIds = await searchAchen();
@@ -14,7 +21,7 @@ export default async function getAchens() {
   }
 }
 
-async function searchAchen(): Promise<Number[]> {
+async function searchAchen(): Promise<number[]> {
   try {
     const response = await axios.post(
       "https://marthoma.in/clergy/",
@@ -24,7 +31,7 @@ async function searchAchen(): Promise<Number[]> {
         submit: "",
       })
     );
-    const achensIds: Number[] = [];
+    const achensIds: number[] = [];
     const root = parse(response.data);
 
     // Process special lectionary items
@@ -43,7 +50,14 @@ async function searchAchen(): Promise<Number[]> {
     return []; // Return an empty string on error
   }
 }
-async function fetchDetails(id: number): Promise<any> {
+async function fetchDetails(id: number): Promise<{
+  name: string;
+  img: string;
+  address: string;
+  phone: string;
+  email: string;
+  designation: string;
+}> {
   try {
     const response = await axios.get(
       "https://marthoma.in/wp-admin/admin-ajax.php",
@@ -54,24 +68,10 @@ async function fetchDetails(id: number): Promise<any> {
         },
       }
     );
-    let data: {
-      name: string;
-      img: string;
-      address: string;
-      phone: string;
-      email: string;
-      designation: string;
-    } = {
-      name: "",
-      img: "",
-      address: "",
-      phone: "",
-      email: "",
-      designation: "",
-    };
+    let data: AchenDetails = {} as AchenDetails; // Initialize data as an empty object
     const root = parse(response.data);
     // Process special lectionary items
-    root.querySelectorAll("div .clergy-image").forEach((elem) => {
+    root.querySelectorAll("div .clergy-image").forEach(() => {
       const name = root.querySelector("div.clergy-image h5")?.text.trim() || ""; // Extracts the name
       const img =
         root.querySelector("div.clergy-image img")?.getAttribute("src") || ""; // Extracts the image URL
@@ -95,6 +95,6 @@ async function fetchDetails(id: number): Promise<any> {
     return data; // Return the fetched data
   } catch (error) {
     console.error("Error fetching data:", error);
-    return {}; // Return an empty string on error
+    return {} as AchenDetails; // Return an empty string on error
   }
 }
