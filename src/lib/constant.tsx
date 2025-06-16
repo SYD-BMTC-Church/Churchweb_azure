@@ -64,7 +64,7 @@ export const navigationMenu: {
   {
     label: "Donate",
     render: () => (
-      <Button>
+      <Button asChild>
         <Link href="https://sydneymarthomachurch.square.site/">Donate</Link>
       </Button>
     ),
@@ -86,38 +86,5 @@ export const requestForms = [
     content: "Share your prayer needs with our church community.",
     icon: <HeartHandshake size={24} />,
     buttonLabel: "Submit Request",
-  },
-];
-
-export const committeeMembers = [
-  {
-    name: "John Abraham",
-    role: "Secretary",
-    image: "/images/committee-1.png",
-  },
-  {
-    name: "Sarah Thomas",
-    role: "Treasurer",
-    image: "/images/committee-2.png",
-  },
-  {
-    name: "Jacob Mathew",
-    role: "Trustee",
-    image: "/images/committee-3.png",
-  },
-  {
-    name: "Rachel Philip",
-    role: "Sunday School Director",
-    image: "/images/committee-4.png",
-  },
-  {
-    name: "Samuel George",
-    role: "Youth Fellowship President",
-    image: "/images/committee-5.png",
-  },
-  {
-    name: "Elizabeth Varghese",
-    role: "Women's Fellowship President",
-    image: "/images/committee-6.png",
   },
 ];
