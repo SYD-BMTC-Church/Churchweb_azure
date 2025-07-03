@@ -10,7 +10,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { requestForms } from "@/lib/constant";
+import {
+  navigationMenu,
+  NavigationMenuItem,
+  requestForms,
+} from "@/lib/constant";
 import MDXRenderer from "@/lib/mdx-helper";
 import axios from "axios";
 import { Contact, MapPin } from "lucide-react";
@@ -79,16 +83,39 @@ export default function Home() {
         subText="A community of faith, hope, and love"
       >
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button size="lg" className="bg-white text-primary hover:bg-white/90">
-            Sunday Service Times
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="text-zinc-600 border-white hover:bg-zinc-300"
+          <Link
+            href={
+              navigationMenu.find(
+                (item: NavigationMenuItem) =>
+                  item.label === "Worship and Events"
+              )?.url || ""
+            }
+            passHref
           >
-            Learn More
-          </Button>
+            <Button
+              size="lg"
+              className="bg-white text-primary hover:bg-white/90"
+            >
+              Sunday Service Times
+            </Button>
+          </Link>
+          <Link
+            href={
+              navigationMenu
+                .find((item: NavigationMenuItem) => item.label === "About")
+                ?.subMenu?.find((subItem) => subItem.label === "Our Church")
+                ?.url || ""
+            }
+            passHref
+          >
+            <Button
+              size="lg"
+              variant="outline"
+              className="text-zinc-600 border-white hover:bg-zinc-300"
+            >
+              Learn More
+            </Button>
+          </Link>
         </div>
       </HeroSection>
 
@@ -119,41 +146,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Upcoming Events Section */}
-      <section className="py-16 bg-muted/50">
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-primary">
-            Upcoming Events
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {events.map((event, index) => (
-              <Card key={index}>
-                <CardHeader>
-                  <CardTitle>{event.title}</CardTitle>
-                  <CardDescription>{event.date}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p>{event.description}</p>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" className="w-full">
-                    Learn More
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <Button
-              variant="outline"
-              className="text-primary border-primary hover:bg-primary hover:text-primary-foreground"
-            >
-              View All Events
-            </Button>
-          </div>
-        </div>
-      </section>
-
       {/* Message from Vicar */}
       <section className="py-16 bg-background">
         <div className="container mx-auto">
@@ -167,7 +159,6 @@ export default function Home() {
                     className="object-cover rounded-full border-4 border-accent"
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    priority
                     loading="lazy"
                   />
                 ) : null}

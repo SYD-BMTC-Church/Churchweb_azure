@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { HeartHandshake, Users } from "lucide-react";
 import Link from "next/link";
-
-export const navigationMenu: {
+export interface NavigationMenuItem {
   label: string;
   url?: string;
   render?: () => React.ReactNode;
@@ -12,7 +11,8 @@ export const navigationMenu: {
     description?: string;
     special?: boolean;
   }[];
-}[] = [
+}
+export const navigationMenu: NavigationMenuItem[] = [
   { label: "Home", url: "/" },
   {
     label: "About",

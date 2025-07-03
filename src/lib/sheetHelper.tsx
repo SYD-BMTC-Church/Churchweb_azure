@@ -9,23 +9,19 @@ function SheetDataToJson(data: string[][]) {
   );
 }
 
-let cachedAuth: any = null;
-
 async function getGlSheetAuth() {
-  if (cachedAuth) return cachedAuth;
-  cachedAuth = await google.auth.getClient({
-    projectId: process.env.GOOGLE_PROJECT_ID,
+  return await google.auth.getClient({
+    projectId: process.env.PROJECT_ID,
     credentials: {
       type: "service_account",
-      project_id: process.env.GOOGLE_PROJECT_ID,
-      private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
-      private_key: process.env.GOOGLE_PRIVATE_KEY,
-      client_email: process.env.GOOGLE_CLIENT_EMAIL,
+      project_id: process.env.PROJECT_ID,
+      private_key_id: process.env.PRIVATE_KEY_ID,
+      private_key: process.env.PRIVATE_KEY,
+      client_email: process.env.CLIENT_EMAIL,
       universe_domain: "googleapis.com",
     },
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
   });
-  return cachedAuth;
 }
 
 export async function updateData(
@@ -38,7 +34,7 @@ export async function updateData(
     const sheets = google.sheets({ version: "v4", auth: jwt });
     const sheetRange = `${sheetName}!A${row + 1}`;
     await sheets.spreadsheets.values.update({
-      spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+      spreadsheetId: process.env.SHEETS_ID,
       range: sheetRange,
       valueInputOption: "USER_ENTERED",
       requestBody: {
@@ -58,7 +54,7 @@ export async function appendData(rowData: any, sheetName = "Sheet1") {
     const auth = await getGlSheetAuth();
     const glSheets = google.sheets({ version: "v4", auth: auth });
     const response = await glSheets.spreadsheets.values.append({
-      spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+      spreadsheetId: process.env.SHEETS_ID,
       range: sheetName,
       valueInputOption: "RAW",
       insertDataOption: "INSERT_ROWS",
@@ -78,7 +74,7 @@ export async function getAllFromSheet(sheet = "Sheet1") {
     const auth = await getGlSheetAuth();
     const sheets = google.sheets({ version: "v4", auth });
     const { data } = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.GOOGLE_SHEETS_ID,
+      spreadsheetId: process.env.SHEETS_ID,
       range: sheet,
     });
     return SheetDataToJson(data.values ?? []);
