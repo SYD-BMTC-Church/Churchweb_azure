@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const calendarId = process.env.GOOGLE_CALENDAR_ID!;
-  const apiKey = process.env.GOOGLE_API_KEY!;
+  const calendarId = process.env.CALENDAR_ID!;
+  const apiKey = process.env.API_KEY!;
 
   const today = new Date();
   const nextSunday = new Date();
