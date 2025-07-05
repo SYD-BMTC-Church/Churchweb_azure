@@ -10,18 +10,41 @@ function SheetDataToJson(data: string[][]) {
 }
 
 async function getGlSheetAuth() {
-  return await google.auth.getClient({
-    projectId: process.env.PROJECT_ID,
-    credentials: {
-      type: "service_account",
-      project_id: process.env.PROJECT_ID,
-      private_key_id: process.env.PRIVATE_KEY_ID,
-      private_key: process.env.PRIVATE_KEY,
-      client_email: process.env.CLIENT_EMAIL,
-      universe_domain: "googleapis.com",
-    },
-    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-  });
+  try {
+    if (!process.env.PROJECT_ID) {
+      throw new Error("PROJECT_ID is not defined in environment variables.");
+    }
+    if (!process.env.PRIVATE_KEY_ID) {
+      throw new Error(
+        "PRIVATE_KEY_ID is not defined in environment variables."
+      );
+    }
+    if (!process.env.PRIVATE_KEY) {
+      throw new Error("PRIVATE_KEY is not defined in environment variables.");
+    }
+    if (!process.env.CLIENT_EMAIL) {
+      throw new Error("CLIENT_EMAIL is not defined in environment variables.");
+    }
+    if (!process.env.SHEETS_ID) {
+      throw new Error("SHEETS_ID is not defined in environment variables.");
+    }
+
+    return await google.auth.getClient({
+      projectId: process.env.PROJECT_ID,
+      credentials: {
+        type: "service_account",
+        project_id: process.env.PROJECT_ID,
+        private_key_id: process.env.PRIVATE_KEY_ID,
+        private_key: process.env.PRIVATE_KEY,
+        client_email: process.env.CLIENT_EMAIL,
+        universe_domain: "googleapis.com",
+      },
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    });
+  } catch (error) {
+    console.error("Error getting Google Sheets authentication:", error);
+    throw new Error("Failed to get Google Sheets authentication.");
+  }
 }
 
 export async function updateData(
