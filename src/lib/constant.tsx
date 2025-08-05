@@ -1,23 +1,34 @@
 import { Button } from "@/components/ui/button";
 import { HeartHandshake, Users } from "lucide-react";
 import Link from "next/link";
+import LucidIcon from "./icon";
 export interface NavigationMenuItem {
   label: string;
   url?: string;
   render?: () => React.ReactNode;
   subMenu?: {
+    icon: string;
     label: string;
     url: string;
     description?: string;
     special?: boolean;
   }[];
 }
+
+export const navUrl = (label: string) => {
+  return {
+    label: label,
+    href: navigationMenu.find((item) => item.label === label)?.url || "",
+  };
+};
+
 export const navigationMenu: NavigationMenuItem[] = [
   { label: "Home", url: "/" },
   {
     label: "About",
     subMenu: [
       {
+        icon: "Church",
         label: "Our Church",
         url: "/about",
         description:
@@ -25,18 +36,21 @@ export const navigationMenu: NavigationMenuItem[] = [
         special: true,
       },
       {
+        icon: "Heart",
         label: "Mission & Vision",
-        url: "/about#mission-vision",
+        url: "/about#mission & vision",
         description:
           "Discover our Mission & Vision, guiding our community and outreach.",
       },
       {
+        icon: "BookOpen",
         label: "Beliefs",
         url: "/about#beliefs",
         description:
           "Explore our core beliefs and values that shape our faith community.",
       },
       {
+        icon: "Users",
         label: "Leadership",
         url: "/leadership",
         description:
@@ -48,17 +62,42 @@ export const navigationMenu: NavigationMenuItem[] = [
   {
     label: "Ministries",
     subMenu: [
-      { label: "Sunday School", url: "/sunday-school" },
-      { label: "Yuvajana Sakhyam", url: "/yuvajana-sakhyam" },
-      { label: "Sevika Sangham", url: "/sevika-sangham" },
-      { label: "Choir", url: "/choir" },
-      { label: "Young Family Fellowship", url: "/young-family-fellowship" },
+      { icon: "Music", label: "Choir", url: "/ministries/choir" },
       {
-        label: "Senior Citizens Fellowship",
-        url: "/senior-citizens-fellowship",
+        icon: "Globe",
+        label: "Edavaka Mission",
+        url: "/ministries/edavaka-mission",
       },
-      { label: "Edavaka Mission", url: "/edavaka-mission" },
-      { label: "Prayer Groups", url: "/prayer-groups" },
+      {
+        icon: "UserCheck",
+        label: "Senior Citizens Fellowship",
+        url: "/ministries/senior-citizens-fellowship",
+      },
+      {
+        icon: "HandHeart",
+        label: "Sevika Sangham",
+        url: "/ministries/sevika-sangham",
+      },
+      {
+        icon: "GraduationCap",
+        label: "Sunday School",
+        url: "/ministries/sunday-school",
+      },
+      {
+        icon: "UsersRound",
+        label: "Young Family Fellowship",
+        url: "/ministries/young-family-fellowship",
+      },
+      {
+        icon: "Flame",
+        label: "Yuvajana Sakhyam",
+        url: "/ministries/yuvajana-sakhyam",
+      },
+      {
+        icon: "HeartHandshake",
+        label: "Area Prayer",
+        url: "/ministries/area-prayer",
+      },
     ],
   },
   {

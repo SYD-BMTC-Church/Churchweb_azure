@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const result = await getAllFromSheet("ContactDetails");
+    const result = await getAllFromSheet("Home!A6:E7");
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error("Failed to fetch data:", error);

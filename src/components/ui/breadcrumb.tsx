@@ -67,13 +67,15 @@ function BreadcrumbSeparator({
   );
 }
 interface BreadcrumbProps {
-  items: {
+  items?: {
     label: string;
     href: string;
   }[];
 }
 
-export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
+export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items = [] }) => {
+  if (!Array.isArray(items)) return null; // Guard against non-array values
+
   return (
     <UIBreadcrumb>
       <BreadcrumbList>

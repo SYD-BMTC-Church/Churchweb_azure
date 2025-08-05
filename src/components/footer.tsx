@@ -14,17 +14,17 @@ import { useEffect, useState } from "react";
 
 export default function Footer() {
   const [contact, setContact] = useState<{
-    addressTitle: string;
-    mapLink: string;
-    address: string;
-    phone: string;
-    email: string;
+    AddressTitle: string;
+    MapLink: string;
+    Address: string;
+    Phone: string;
+    Email: string;
   }>({
-    addressTitle: "",
-    mapLink: "",
-    address: "",
-    phone: "",
-    email: "",
+    AddressTitle: "",
+    MapLink: "",
+    Address: "",
+    Phone: "",
+    Email: "",
   });
   useEffect(() => {
     getContactDetails();
@@ -48,15 +48,15 @@ export default function Footer() {
             <address className="not-italic space-y-2">
               <p className="flex items-center gap-2">
                 <MapPin size={16} />
-                {contact.address}
+                {contact.Address}
               </p>
               <p className="flex items-center gap-2">
                 <Phone size={16} />
-                {contact.phone}
+                {contact.Phone}
               </p>
               <p className="flex items-center gap-2">
                 <Mail size={16} />
-                {contact.email}
+                {contact.Email}
               </p>
             </address>
           </div>
