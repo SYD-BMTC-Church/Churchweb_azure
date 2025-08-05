@@ -70,13 +70,13 @@ export const navigationMenu: NavigationMenuItem[] = [
       },
       {
         icon: "UserCheck",
-        label: "Senior Citizens Fellowship",
-        url: "/ministries/senior-citizens-fellowship",
+        label: "Senior Citizens",
+        url: "/ministries/senior-citizens",
       },
       {
         icon: "HandHeart",
-        label: "Sevika Sangham",
-        url: "/ministries/sevika-sangham",
+        label: "Sevika Sanghom",
+        url: "/ministries/sevika-sanghom",
       },
       {
         icon: "GraduationCap",
@@ -113,7 +113,7 @@ export const navigationMenu: NavigationMenuItem[] = [
 export const requestForms = [
   {
     title: "New Here?",
-    link: "/new-here",
+    link: "/contact-us",
     content:
       "Welcome to our church family. Find out what to expect on your first visit.",
     icon: <Users size={24} />,
