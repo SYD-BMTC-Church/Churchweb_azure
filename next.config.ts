@@ -9,12 +9,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "sydneymarthoma.church",
-        pathname: "/wp-content/uploads/**", // Allow images from this path
-      },
-      {
-        protocol: "https",
-        hostname: "drive.google.com",
-        pathname: "/uc?id=**", // Allow images from this path
+        pathname: "/wp-content/uploads/**",
       },
     ],
   },
