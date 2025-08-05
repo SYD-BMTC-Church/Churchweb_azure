@@ -8,11 +8,12 @@ import { Church, UserRound, Users } from "lucide-react";
 import Image from "next/image";
 import FormerVicarsPage from "./formerVicarsPage";
 import axios from "axios";
+import { navUrl } from "@/lib/constant";
 interface CommitteeMember {
-  committee: string;
-  name: string;
-  role: string;
-  image: string;
+  Sector: string;
+  MemberName: string;
+  Role: string;
+  Image: string;
 }
 export default function Page() {
   const [committeeMembers, setCommitteeMembers] = useState<CommitteeMember[]>(
@@ -45,8 +46,8 @@ export default function Page() {
           <Breadcrumb
             items={[
               { label: "Home", href: "/" },
-              { label: "About", href: "/about" },
-              { label: "Former Vicars", href: "/about/former-vicars" },
+              navUrl("About"),
+              navUrl("Former Vicars"),
             ]}
           />
         </div>
@@ -58,23 +59,25 @@ export default function Page() {
             <h2 className="text-3xl font-bold text-primary">Our Leadership</h2>
           </div>
           <Card>
-            <CardContent className="pt-6">
+            <CardContent>
               <div className="mb-8">
                 <h3 className="text-xl font-bold mb-4">President</h3>
                 {committeeMembers[0] && (
                   <div className="flex flex-col md:flex-row gap-6 items-center">
                     <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-primary/20">
                       <Image
-                        src={committeeMembers[0].image}
-                        alt={committeeMembers[0].name}
+                        src={committeeMembers[0].Image}
+                        alt={committeeMembers[0].MemberName}
                         fill
                         className="object-cover"
                       />
                     </div>
                     <div>
-                      <h4 className="font-bold">{committeeMembers[0].name}</h4>
+                      <h4 className="font-bold">
+                        {committeeMembers[0].MemberName}
+                      </h4>
                       <p className="text-sm text-muted-foreground">
-                        {committeeMembers[0].role}
+                        {committeeMembers[0].Role}
                       </p>
                     </div>
                   </div>
@@ -91,21 +94,40 @@ export default function Page() {
                   administrative affairs of the parish.
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {committeeMembers.map((member, index) => (
-                    <div key={index} className="flex items-center gap-4">
-                      <div className="w-16 h-16 rounded-full overflow-hidden bg-muted flex items-center justify-center">
-                        <UserRound />
-                      </div>
-                      <div>
-                        <h4 className="font-bold">{member.name}</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {member.role}
-                        </p>
-                      </div>
+                {/* Group members by sector */}
+                {Object.entries(
+                  committeeMembers
+                    .filter((item) => !item.Role.includes("Vicar"))
+                    .reduce<Record<string, CommitteeMember[]>>(
+                      (acc, member) => {
+                        acc[member.Sector] = acc[member.Sector] || [];
+                        acc[member.Sector].push(member);
+                        return acc;
+                      },
+                      {}
+                    )
+                ).map(([sector, members]) => (
+                  <div key={sector} className="mb-8">
+                    <h4 className="text-lg font-semibold mb-2 text-primary">
+                      {sector}
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                      {members.map((member, index) => (
+                        <div key={index} className="flex items-center gap-4">
+                          <div className="w-16 h-16 rounded-full overflow-hidden bg-muted flex items-center justify-center">
+                            <UserRound />
+                          </div>
+                          <div>
+                            <h4 className="font-bold">{member.MemberName}</h4>
+                            <p className="text-sm text-muted-foreground">
+                              {member.Role}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
@@ -121,7 +143,7 @@ export default function Page() {
               <h2 className="text-3xl font-bold text-primary">Former Vicars</h2>
             </div>
             <Card>
-              <CardContent className="pt-6">
+              <CardContent>
                 <FormerVicarsPage />
               </CardContent>
             </Card>

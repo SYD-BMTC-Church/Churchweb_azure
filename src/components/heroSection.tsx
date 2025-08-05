@@ -1,6 +1,13 @@
 import Image from "next/image";
 import React from "react";
 
+export interface HeroSectionProps {
+  imageSrc: string;
+  altText: string;
+  title: string;
+  subText: string;
+  children?: React.ReactNode;
+}
 export default function HeroSection({
   imageSrc,
   altText,
@@ -17,13 +24,15 @@ export default function HeroSection({
   return (
     <section className="relative h-[70vh] w-full">
       <div className="absolute inset-0 bg-black/50 z-10" />
-      <Image
-        src={imageSrc}
-        alt={altText}
-        fill
-        className="object-cover"
-        priority
-      />
+      {imageSrc ? (
+        <Image
+          src={imageSrc}
+          alt={altText}
+          fill
+          className="object-cover"
+          priority
+        />
+      ) : null}
       <div className="relative z-20 container mx-auto h-full flex flex-col items-center justify-center text-center text-white">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
         <p

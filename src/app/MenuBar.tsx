@@ -8,7 +8,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { navigationMenu } from "@/lib/constant";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Music } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -27,6 +27,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import LucidIcon from "@/lib/icon";
 
 export function MenuBar() {
   return (
@@ -67,7 +68,10 @@ export function MenuBar() {
                                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                                 href={subItem.url}
                               >
-                                <div className="text-sm font-medium leading-none">
+                                <div className="text-sm font-medium leading-none flex items-center gap-2">
+                                  {subItem.icon && (
+                                    <LucidIcon name={subItem.icon} />
+                                  )}
                                   {subItem.label}
                                 </div>
                                 <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
@@ -119,7 +123,12 @@ export function MenuBar() {
                           {item.subMenu.map((subItem) => (
                             <SidebarMenuItem key={subItem.label}>
                               <SidebarMenuButton asChild>
-                                <a href={subItem.url}>{subItem.label}</a>
+                                <a href={subItem.url}>
+                                  {subItem.icon && (
+                                    <LucidIcon name={subItem.icon} />
+                                  )}
+                                  {subItem.label}
+                                </a>
                               </SidebarMenuButton>
                             </SidebarMenuItem>
                           ))}

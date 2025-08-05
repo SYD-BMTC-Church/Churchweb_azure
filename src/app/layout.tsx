@@ -6,6 +6,7 @@ import Image from "next/image";
 import type React from "react";
 import "./globals.css";
 import { MenuBar } from "./MenuBar";
+import Link from "next/link";
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -53,25 +54,27 @@ function Header() {
     <header className="bg-background border-b border-border sticky top-0 z-40">
       <div className="container mx-auto py-4">
         <div className="flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 flex items-center justify-center">
-              <Image
-                src="/images/logo.png"
-                alt="Mar Thoma Church Logo"
-                width={100}
-                height={100}
-                priority
-              />
+          <Link href="/" passHref>
+            <div className="flex items-center gap-3">
+              <div className="h-12 w-12 flex items-center justify-center">
+                <Image
+                  src="/images/logo.png"
+                  alt="Mar Thoma Church Logo"
+                  width={100}
+                  height={100}
+                  priority
+                />
+              </div>
+              <div>
+                <h1 className="text-sm lg:text-xl font-cinzel font-bold text-primary">
+                  Bethel Mar Thoma Church
+                </h1>
+                <p className="tsxt-xs md:text-sm text-muted-foreground">
+                  Sydney, Australia
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-sm lg:text-xl font-cinzel font-bold text-primary">
-                Bethel Mar Thoma Church
-              </h1>
-              <p className="tsxt-xs md:text-sm text-muted-foreground">
-                Sydney, Australia
-              </p>
-            </div>
-          </div>
+          </Link>
           <MenuBar />
         </div>
       </div>

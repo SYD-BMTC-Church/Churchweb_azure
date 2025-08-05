@@ -21,6 +21,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { navUrl } from "@/lib/constant";
 
 export default function PrayerRequestPage() {
   const [formState, setFormState] = useState({
@@ -129,10 +130,7 @@ export default function PrayerRequestPage() {
                 label: "Home",
                 href: "/",
               },
-              {
-                label: "Prayer Request",
-                href: "/prayer-request",
-              },
+              navUrl("Prayer Request"),
             ]}
           />
         </div>

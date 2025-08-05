@@ -1,10 +1,8 @@
 "use client";
-import HeroSection from "@/components/heroSection";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -13,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   navigationMenu,
   NavigationMenuItem,
+  navUrl,
   requestForms,
 } from "@/lib/constant";
 import MDXRenderer from "@/lib/mdx-helper";
@@ -21,6 +20,7 @@ import { Contact, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import PageLayout from "./page-layout";
 
 export default function Home() {
   const [MessagefromtheVicar, setMessagefromtheVicar] = useState<{
@@ -31,17 +31,17 @@ export default function Home() {
     image: undefined,
   });
   const [contact, setContact] = useState<{
-    addressTitle: string;
-    mapLink: string;
-    address: string;
-    phone: string;
-    email: string;
+    AddressTitle: string;
+    MapLink: string;
+    Address: string;
+    Phone: string;
+    Email: string;
   }>({
-    addressTitle: "",
-    mapLink: "",
-    address: "",
-    phone: "",
-    email: "",
+    AddressTitle: "",
+    MapLink: "",
+    Address: "",
+    Phone: "",
+    Email: "",
   });
 
   useEffect(() => {
@@ -74,50 +74,54 @@ export default function Home() {
     });
   };
   return (
-    <main className="flex min-h-screen flex-col">
+    <PageLayout
+      heroSectionProps={{
+        imageSrc: "/images/church1.jpeg",
+        altText: "Mar Thoma Church Sydney Altar",
+        title: "Welcome to Mar Thoma Church Sydney",
+        subText:
+          "A community of faith, hope, and love. Join us in worship and fellowship.",
+        children: (
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link
+              href={
+                navigationMenu.find(
+                  (item: NavigationMenuItem) =>
+                    item.label === "Worship and Events"
+                )?.url || ""
+              }
+              passHref
+            >
+              <Button
+                size="lg"
+                className="bg-white text-primary hover:bg-white/90"
+              >
+                Sunday Service Times
+              </Button>
+            </Link>
+            <Link
+              href={
+                navigationMenu
+                  .find((item: NavigationMenuItem) => item.label === "About")
+                  ?.subMenu?.find((subItem) => subItem.label === "Our Church")
+                  ?.url || ""
+              }
+              passHref
+            >
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-zinc-600 border-white hover:bg-zinc-300"
+              >
+                Learn More
+              </Button>
+            </Link>
+          </div>
+        ),
+      }}
+      breadcrumbItems={[{ label: "Home", href: "/" }, navUrl("About")]}
+    >
       {/* Hero Section */}
-      <HeroSection
-        imageSrc="/images/church1.jpeg"
-        altText="Mar Thoma Church Sydney"
-        title="Welcome to Mar Thoma Church Sydney"
-        subText="A community of faith, hope, and love"
-      >
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Link
-            href={
-              navigationMenu.find(
-                (item: NavigationMenuItem) =>
-                  item.label === "Worship and Events"
-              )?.url || ""
-            }
-            passHref
-          >
-            <Button
-              size="lg"
-              className="bg-white text-primary hover:bg-white/90"
-            >
-              Sunday Service Times
-            </Button>
-          </Link>
-          <Link
-            href={
-              navigationMenu
-                .find((item: NavigationMenuItem) => item.label === "About")
-                ?.subMenu?.find((subItem) => subItem.label === "Our Church")
-                ?.url || ""
-            }
-            passHref
-          >
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-zinc-600 border-white hover:bg-zinc-300"
-            >
-              Learn More
-            </Button>
-          </Link>
-        </div>
-      </HeroSection>
 
       {/* Quick Links Section */}
       <section className="py-12 text-primary-foreground bg-primary/10">
@@ -169,9 +173,6 @@ export default function Home() {
                 Message from the Vicar
               </h2>
               <MDXRenderer markdown={MessagefromtheVicar.message} />
-              {/* <div className="mt-6">
-                <Button>Read Full Message</Button>
-              </div> */}
             </div>
           </div>
         </div>
@@ -209,9 +210,9 @@ export default function Home() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <Link href={contact.mapLink} target="_blank">
-                    <p className="font-medium">{contact.addressTitle}</p>
-                    {contact.address.split(", ").map((line) => (
+                  <Link href={contact.MapLink} target="_blank">
+                    <p className="font-medium">{contact.AddressTitle}</p>
+                    {contact.Address.split(", ").map((line) => (
                       <p key={line} className="text-primary underline">
                         {line},
                       </p>
@@ -226,13 +227,13 @@ export default function Home() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p>Phone: {contact.phone}</p>
-                  <p>Email: {contact.email}</p>
+                  <p>Phone: {contact.Phone}</p>
+                  <p>Email: {contact.Email}</p>
                 </CardContent>
                 <CardFooter>
                   <Link
                     className="w-full"
-                    href={contact.mapLink}
+                    href={contact.MapLink}
                     target="_blank"
                     passHref
                   >
@@ -244,27 +245,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </main>
+    </PageLayout>
   );
 }
-
-const events = [
-  {
-    title: "Sunday Worship Service",
-    date: "Every Sunday, 9:30 AM",
-    description:
-      "Join us for our weekly worship service with praise, prayer, and teaching from God's Word.",
-  },
-  {
-    title: "Bible Study",
-    date: "Wednesday, 7:00 PM",
-    description:
-      "Midweek Bible study and prayer meeting for spiritual growth and fellowship.",
-  },
-  {
-    title: "Youth Fellowship",
-    date: "Friday, 6:30 PM",
-    description:
-      "A time for young people to connect, worship, and grow in their faith together.",
-  },
-];
