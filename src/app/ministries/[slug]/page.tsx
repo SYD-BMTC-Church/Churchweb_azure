@@ -12,8 +12,8 @@ export default async function Page({
       return <MinistryContent pageTitle="Choir" />;
     case "edavaka-mission":
       return <MinistryContent pageTitle="Edavaka Mission" />;
-    case "senior-citizen":
-      return <MinistryContent pageTitle="Senior Citizen" />;
+    case "senior-citizens":
+      return <MinistryContent pageTitle="Senior Citizens" />;
     case "sevika-sanghom":
       return <MinistryContent pageTitle="Sevika Sanghom" />;
     case "sunday-school":
