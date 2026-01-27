@@ -23,7 +23,14 @@ jobs:
           npm install
           npm run build
 
-      - name: Prepare deployment package without node_modules
+      - name: Install production dependencies only
+        run: |
+          # Install only production dependencies to minimize package size
+          npm ci --production
+          # Remove dev dependencies to reduce size
+          npm prune --production
+
+      - name: Prepare deployment package with minimal dependencies
         run: |
           # Create deployment directory
           mkdir -p ./deployment
@@ -32,10 +39,12 @@ jobs:
           ls -la .next/ | head -10
           echo "BUILD_ID content:"
           cat .next/BUILD_ID
-          # Copy source files and built application (NO node_modules)
+          # Copy source files and built application
           cp -r .next ./deployment/
           cp -r public ./deployment/
           cp -r src ./deployment/
+          # Copy only production node_modules (smaller)
+          cp -r node_modules ./deployment/
           cp package*.json ./deployment/
           cp next.config.ts ./deployment/
           cp tsconfig.json ./deployment/
@@ -44,8 +53,6 @@ jobs:
           cp components.json ./deployment/
           cp web.config ./deployment/
           cp app.js ./deployment/
-          cp .deployment ./deployment/
-          cp startup.sh ./deployment/
           # Update package.json to use our custom app.js entry point and set NODE_ENV
           sed -i 's/"start": "next start"/"start": "NODE_ENV=production node app.js"/' ./deployment/package.json
           # Also update the original package.json to ensure consistency
@@ -62,21 +69,17 @@ jobs:
           ls -la ./deployment/
           echo "=== .next directory structure ==="
           ls -la ./deployment/.next/
-          echo "=== .next/server directory ==="
-          ls -la ./deployment/.next/server/ | head -10
           echo "=== BUILD_ID file ==="
           cat ./deployment/.next/BUILD_ID
-          echo "=== build-manifest.json exists ==="
-          ls -la ./deployment/.next/build-manifest.json
           echo "=== Updated Package.json content ==="
           cat ./deployment/package.json | grep -A 5 -B 5 '"start"'
           echo "=== App.js exists ==="
           ls -la ./deployment/app.js
-          echo "=== .deployment file ==="
-          cat ./deployment/.deployment
-          echo "=== startup.sh file ==="
-          cat ./deployment/startup.sh
-          echo "=== Total deployment size (without node_modules) ==="
+          echo "=== Node modules/next exists ==="
+          ls -la ./deployment/node_modules/next/ | head -5 || echo "Next module not found"
+          echo "=== Production node_modules size ==="
+          du -sh ./deployment/node_modules/
+          echo "=== Total deployment size ==="
           du -sh ./deployment/
 
       - name: Upload artifact for deployment job
