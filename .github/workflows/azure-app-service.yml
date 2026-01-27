@@ -39,8 +39,13 @@ jobs:
           cp components.json ./deployment/
           cp web.config ./deployment/
           cp app.js ./deployment/
-          # Copy environment template (Azure will use environment variables from portal)
-          cp .env.local ./deployment/
+          # Copy environment template if it exists (Azure will use environment variables from portal)
+          if [ -f ".env.local" ]; then
+            cp .env.local ./deployment/
+            echo "Copied .env.local template"
+          else
+            echo "No .env.local found - Azure will use portal environment variables"
+          fi
           # Verify the structure
           echo "=== Deployment structure ==="
           ls -la ./deployment/
