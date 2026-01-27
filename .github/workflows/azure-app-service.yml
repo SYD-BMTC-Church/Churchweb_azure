@@ -37,8 +37,17 @@ jobs:
           cp -r public ./deployment/public
           # Copy web.config for Azure
           cp web.config ./deployment/
-          # Fix the package.json to use the correct start command
-          sed -i 's/"start": "next start"/"start": "node server.js"/' ./deployment/package.json
+          # Create a completely new package.json with the correct start command
+          cat > ./deployment/package.json << 'EOF'
+          {
+            "name": "sydneymarthomachurch",
+            "version": "0.1.0",
+            "private": true,
+            "scripts": {
+              "start": "node server.js"
+            }
+          }
+          EOF
           # Verify the structure
           echo "=== Deployment structure ==="
           ls -la ./deployment/
@@ -46,8 +55,8 @@ jobs:
           ls -la ./deployment/.next/
           echo "=== Static files ==="
           ls -la ./deployment/.next/static/ || echo "No static files found"
-          echo "=== Package.json start script ==="
-          grep '"start"' ./deployment/package.json
+          echo "=== Package.json content ==="
+          cat ./deployment/package.json
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
