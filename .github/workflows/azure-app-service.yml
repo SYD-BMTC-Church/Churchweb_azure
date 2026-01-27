@@ -32,7 +32,9 @@ jobs:
           # Ensure .next/static directory exists before copying
           mkdir -p ./deployment/.next/static
           # Copy static files to the correct location in standalone .next
-          cp -r .next/static/* ./deployment/.next/static/ 2>/dev/null || echo "No static files to copy"
+          if [ -d ".next/static" ]; then
+            cp -r .next/static/* ./deployment/.next/static/
+          fi
           # Copy public files
           cp -r public ./deployment/public
           # Copy web.config for Azure
@@ -54,7 +56,7 @@ jobs:
           echo "=== .next directory ==="
           ls -la ./deployment/.next/
           echo "=== Build ID file ==="
-          ls -la ./deployment/.next/BUILD_ID || echo "No BUILD_ID found"
+          cat ./deployment/.next/BUILD_ID || echo "No BUILD_ID found"
           echo "=== Build manifest ==="
           ls -la ./deployment/.next/build-manifest.json || echo "No build-manifest.json found"
           echo "=== Static files ==="
@@ -63,6 +65,8 @@ jobs:
           cat ./deployment/package.json
           echo "=== Server.js exists ==="
           ls -la ./deployment/server.js
+          echo "=== Node modules exists ==="
+          ls -la ./deployment/node_modules/ | head -10 || echo "No node_modules found"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
