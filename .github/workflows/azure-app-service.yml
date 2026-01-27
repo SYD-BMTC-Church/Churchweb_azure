@@ -47,6 +47,8 @@ jobs:
           cp app.js ./deployment/
           # Update package.json to use our custom app.js entry point and set NODE_ENV
           sed -i 's/"start": "next start"/"start": "NODE_ENV=production node app.js"/' ./deployment/package.json
+          # Also update the original package.json to ensure consistency
+          sed -i 's/"start": "next start"/"start": "NODE_ENV=production node app.js"/' package.json
           # Copy environment template if it exists (Azure will use environment variables from portal)
           if [ -f ".env.local" ]; then
             cp .env.local ./deployment/
