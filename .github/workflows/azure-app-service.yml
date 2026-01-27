@@ -23,7 +23,7 @@ jobs:
           npm install
           npm run build
 
-      - name: Prepare deployment package
+      - name: Prepare deployment package with dependencies
         run: |
           # Create deployment directory
           mkdir -p ./deployment
@@ -31,6 +31,7 @@ jobs:
           cp -r .next ./deployment/
           cp -r public ./deployment/
           cp -r src ./deployment/
+          cp -r node_modules ./deployment/
           cp package*.json ./deployment/
           cp next.config.ts ./deployment/
           cp tsconfig.json ./deployment/
@@ -39,7 +40,6 @@ jobs:
           cp components.json ./deployment/
           cp web.config ./deployment/
           cp app.js ./deployment/
-          cp .deployment ./deployment/
           # Update package.json to use our custom app.js entry point
           sed -i 's/"start": "next start"/"start": "node app.js"/' ./deployment/package.json
           # Copy environment template if it exists (Azure will use environment variables from portal)
@@ -58,8 +58,10 @@ jobs:
           cat ./deployment/package.json | grep -A 5 -B 5 '"start"'
           echo "=== App.js exists ==="
           ls -la ./deployment/app.js
-          echo "=== .deployment file ==="
-          cat ./deployment/.deployment
+          echo "=== Node modules exists ==="
+          ls -la ./deployment/node_modules/ | head -10
+          echo "=== Next module exists ==="
+          ls -la ./deployment/node_modules/next/ | head -5 || echo "Next module not found"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
