@@ -39,6 +39,9 @@ jobs:
           cp components.json ./deployment/
           cp web.config ./deployment/
           cp app.js ./deployment/
+          cp .deployment ./deployment/
+          # Update package.json to use our custom app.js entry point
+          sed -i 's/"start": "next start"/"start": "node app.js"/' ./deployment/package.json
           # Copy environment template if it exists (Azure will use environment variables from portal)
           if [ -f ".env.local" ]; then
             cp .env.local ./deployment/
@@ -51,10 +54,12 @@ jobs:
           ls -la ./deployment/
           echo "=== .next directory ==="
           ls -la ./deployment/.next/
-          echo "=== Package.json content ==="
-          cat ./deployment/package.json
+          echo "=== Updated Package.json content ==="
+          cat ./deployment/package.json | grep -A 5 -B 5 '"start"'
           echo "=== App.js exists ==="
           ls -la ./deployment/app.js
+          echo "=== .deployment file ==="
+          cat ./deployment/.deployment
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
