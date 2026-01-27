@@ -30,14 +30,22 @@ jobs:
 
       - name: Prepare standalone deployment
         run: |
+          # Create deployment directory
+          mkdir -p ./deployment
           # Copy standalone server files
           cp -r .next/standalone/* ./deployment/
+          # Create .next directory in deployment
+          mkdir -p ./deployment/.next
           # Copy static files
           cp -r .next/static ./deployment/.next/static
           # Copy public files
           cp -r public ./deployment/public
           # Copy web.config for Azure
           cp web.config ./deployment/
+          # Create a simple package.json for the standalone deployment
+          echo '{"name":"sydneymarthomachurch","version":"0.1.0","scripts":{"start":"node server.js"}}' > ./deployment/package.json
+          # List contents to verify
+          ls -la ./deployment/
         
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
