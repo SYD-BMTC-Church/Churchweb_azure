@@ -27,20 +27,25 @@ jobs:
         run: |
           # Create deployment directory
           mkdir -p ./deployment
-          # Copy standalone server files
+          # Copy ALL standalone files (includes server.js, package.json, .next/, node_modules/)
           cp -r .next/standalone/* ./deployment/
-          # Create .next directory in deployment
-          mkdir -p ./deployment/.next
-          # Copy static files
+          # Copy static files to the correct location in standalone .next
           cp -r .next/static ./deployment/.next/static
           # Copy public files
           cp -r public ./deployment/public
           # Copy web.config for Azure
           cp web.config ./deployment/
-          # Create a simple package.json for the standalone deployment
-          echo '{"name":"sydneymarthomachurch","version":"0.1.0","scripts":{"start":"node server.js"}}' > ./deployment/package.json
-          # List contents to verify
+          # Fix the package.json to use the correct start command
+          sed -i 's/"start": "next start"/"start": "node server.js"/' ./deployment/package.json
+          # Verify the structure
+          echo "=== Deployment structure ==="
           ls -la ./deployment/
+          echo "=== .next directory ==="
+          ls -la ./deployment/.next/
+          echo "=== Static files ==="
+          ls -la ./deployment/.next/static/ || echo "No static files found"
+          echo "=== Package.json start script ==="
+          grep '"start"' ./deployment/package.json
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
