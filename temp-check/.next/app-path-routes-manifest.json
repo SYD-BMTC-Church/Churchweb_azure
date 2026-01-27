@@ -1,0 +1,23 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/api/about/leadership/route": "/api/about/leadership",
+  "/api/about/route": "/api/about",
+  "/api/about/former-vicars/route": "/api/about/former-vicars",
+  "/api/contact-details/route": "/api/contact-details",
+  "/api/calendar-timing/route": "/api/calendar-timing",
+  "/api/form-submit/contact-us/route": "/api/form-submit/contact-us",
+  "/api/form-submit/prayer-request/route": "/api/form-submit/prayer-request",
+  "/api/get-achens/route": "/api/get-achens",
+  "/api/home/route": "/api/home",
+  "/api/lectionary/route": "/api/lectionary",
+  "/api/route": "/api",
+  "/api/ministries/route": "/api/ministries",
+  "/favicon.ico/route": "/favicon.ico",
+  "/about/page": "/about",
+  "/contact-us/page": "/contact-us",
+  "/page": "/",
+  "/ministries/[slug]/page": "/ministries/[slug]",
+  "/leadership/page": "/leadership",
+  "/prayer-request/page": "/prayer-request",
+  "/worship-events/page": "/worship-events"
+}

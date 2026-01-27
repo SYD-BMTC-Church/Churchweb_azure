@@ -1,0 +1,23 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/about/leadership/route": "app/api/about/leadership/route.js",
+  "/api/about/route": "app/api/about/route.js",
+  "/api/about/former-vicars/route": "app/api/about/former-vicars/route.js",
+  "/api/contact-details/route": "app/api/contact-details/route.js",
+  "/api/calendar-timing/route": "app/api/calendar-timing/route.js",
+  "/api/form-submit/contact-us/route": "app/api/form-submit/contact-us/route.js",
+  "/api/form-submit/prayer-request/route": "app/api/form-submit/prayer-request/route.js",
+  "/api/get-achens/route": "app/api/get-achens/route.js",
+  "/api/home/route": "app/api/home/route.js",
+  "/api/lectionary/route": "app/api/lectionary/route.js",
+  "/api/route": "app/api/route.js",
+  "/api/ministries/route": "app/api/ministries/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/about/page": "app/about/page.js",
+  "/contact-us/page": "app/contact-us/page.js",
+  "/page": "app/page.js",
+  "/ministries/[slug]/page": "app/ministries/[slug]/page.js",
+  "/leadership/page": "app/leadership/page.js",
+  "/prayer-request/page": "app/prayer-request/page.js",
+  "/worship-events/page": "app/worship-events/page.js"
+}

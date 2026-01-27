@@ -23,50 +23,33 @@ jobs:
           npm install
           npm run build
 
-      - name: Prepare standalone deployment
+      - name: Prepare deployment package
         run: |
           # Create deployment directory
           mkdir -p ./deployment
-          # Copy ALL standalone files (includes server.js, package.json, .next/, node_modules/)
-          cp -r .next/standalone/* ./deployment/
-          # Ensure .next/static directory exists before copying
-          mkdir -p ./deployment/.next/static
-          # Copy static files to the correct location in standalone .next
-          if [ -d ".next/static" ]; then
-            cp -r .next/static/* ./deployment/.next/static/
-          fi
-          # Copy public files
-          cp -r public ./deployment/public
-          # Copy web.config for Azure
+          # Copy source files and built application
+          cp -r .next ./deployment/
+          cp -r public ./deployment/
+          cp -r src ./deployment/
+          cp package*.json ./deployment/
+          cp next.config.ts ./deployment/
+          cp tsconfig.json ./deployment/
+          cp tailwind.config.ts ./deployment/
+          cp postcss.config.mjs ./deployment/
+          cp components.json ./deployment/
           cp web.config ./deployment/
-          # Create a completely new package.json with the correct start command
-          cat > ./deployment/package.json << 'EOF'
-          {
-            "name": "sydneymarthomachurch",
-            "version": "0.1.0",
-            "private": true,
-            "scripts": {
-              "start": "node server.js"
-            }
-          }
-          EOF
-          # Verify the structure and build files
+          cp app.js ./deployment/
+          # Copy environment template (Azure will use environment variables from portal)
+          cp .env.local ./deployment/
+          # Verify the structure
           echo "=== Deployment structure ==="
           ls -la ./deployment/
           echo "=== .next directory ==="
           ls -la ./deployment/.next/
-          echo "=== Build ID file ==="
-          cat ./deployment/.next/BUILD_ID || echo "No BUILD_ID found"
-          echo "=== Build manifest ==="
-          ls -la ./deployment/.next/build-manifest.json || echo "No build-manifest.json found"
-          echo "=== Static files ==="
-          ls -la ./deployment/.next/static/ || echo "No static files found"
           echo "=== Package.json content ==="
           cat ./deployment/package.json
-          echo "=== Server.js exists ==="
-          ls -la ./deployment/server.js
-          echo "=== Node modules exists ==="
-          ls -la ./deployment/node_modules/ | head -10 || echo "No node_modules found"
+          echo "=== App.js exists ==="
+          ls -la ./deployment/app.js
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
