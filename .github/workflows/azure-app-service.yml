@@ -24,24 +24,11 @@ jobs:
           npm install
           npm run build
 
-      - name: Prepare deployment package
-        run: |
-          # Create deployment package directory
-          mkdir -p deployment-package
-          # Copy all files from standalone build (includes server.js, package.json, node_modules, .next)
-          cp -r .next/standalone/* deployment-package/
-          # Copy static assets to deployment package
-          cp -r public deployment-package/
-          cp -r .next/static deployment-package/.next/
-          # Copy Azure configuration files
-          cp web.config deployment-package/
-          cp startup.cmd deployment-package/
-
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: deployment-package
+          path: .
 
   deploy:
     runs-on: ubuntu-latest
