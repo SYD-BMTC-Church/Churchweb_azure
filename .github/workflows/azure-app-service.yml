@@ -48,15 +48,21 @@ jobs:
             }
           }
           EOF
-          # Verify the structure
+          # Verify the structure and build files
           echo "=== Deployment structure ==="
           ls -la ./deployment/
           echo "=== .next directory ==="
           ls -la ./deployment/.next/
+          echo "=== Build ID file ==="
+          ls -la ./deployment/.next/BUILD_ID || echo "No BUILD_ID found"
+          echo "=== Build manifest ==="
+          ls -la ./deployment/.next/build-manifest.json || echo "No build-manifest.json found"
           echo "=== Static files ==="
           ls -la ./deployment/.next/static/ || echo "No static files found"
           echo "=== Package.json content ==="
           cat ./deployment/package.json
+          echo "=== Server.js exists ==="
+          ls -la ./deployment/server.js
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
