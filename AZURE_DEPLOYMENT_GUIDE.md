@@ -217,7 +217,7 @@ jobs:
           cp -r src ./deployment/
           cp -r node_modules ./deployment/
           cp package*.json ./deployment/
-          cp next.config.ts ./deployment/
+          cp next.config.js ./deployment/
           cp tsconfig.json ./deployment/
           cp tailwind.config.ts ./deployment/
           cp postcss.config.mjs ./deployment/
@@ -299,14 +299,13 @@ jobs:
 
 ## Next.js Configuration
 
-### 4. `next.config.ts` - Next.js Configuration
+### 4. `next.config.js` - Next.js Configuration
 
-Ensure your Next.js config does NOT use standalone mode:
+**IMPORTANT: Use JavaScript config, not TypeScript, to avoid dependency issues in production:**
 
-```typescript
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+```javascript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   /* config options here */
   // DO NOT USE: output: 'standalone',
   images: {
@@ -321,8 +320,13 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
 ```
+
+**Why JavaScript instead of TypeScript:**
+- Avoids TypeScript dependency in production
+- Prevents permission errors during Azure deployment
+- Still provides type hints via JSDoc comments
 
 ## Azure Configuration
 
@@ -393,8 +397,8 @@ Add these to GitHub repository > Settings > Secrets and variables > Actions:
 - **"Could not find production build"** - Ensure .next directory is included with include-hidden-files: true
 - **App not starting** - Check Azure logs for specific error messages
 - **Environment variables not working** - Verify they're set in Azure Portal, not just .env files
-- **Google API errors** - Ensure PRIVATE_KEY includes the full key with BEGIN/END markers
-- **Sheets/Calendar not loading** - Verify PROJECT_ID, CLIENT_EMAIL, and SHEETS_ID are correct
+- **TypeScript config issues** - Use `next.config.js` instead of `next.config.ts` to avoid TypeScript dependency
+- **Permission errors during npm install** - Use JavaScript config files to avoid runtime TypeScript installation
 
 ## Current Working Environment Variables
 
@@ -431,7 +435,7 @@ your-project/
 ├── public/
 ├── app.js
 ├── web.config
-├── next.config.ts
+├── next.config.js
 ├── package.json
 └── other Next.js files...
 ```
@@ -444,3 +448,17 @@ your-project/
 - Debugging logs help troubleshoot deployment issues
 
 This configuration has been tested and confirmed working for Next.js deployment to Azure App Service on Linux.
+
+## Success! 🎉
+
+This configuration has been tested and confirmed working for Next.js deployment to Azure App Service on Linux. The key breakthrough was using JavaScript configuration files instead of TypeScript to avoid dependency and permission issues during deployment.
+
+**Final Working Setup:**
+- ✅ Custom `app.js` entry point
+- ✅ Production-only `node_modules` included
+- ✅ JavaScript `next.config.js` (not TypeScript)
+- ✅ GitHub Actions with `include-hidden-files: true`
+- ✅ Minimal environment variables (7 essential ones)
+- ✅ No Azure build interference
+
+Your Next.js application should now be running successfully on Azure App Service!
