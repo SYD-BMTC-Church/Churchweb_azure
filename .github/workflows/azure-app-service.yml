@@ -49,21 +49,25 @@ jobs:
           else
             echo "No .env.local found - Azure will use portal environment variables"
           fi
-          # Verify the structure
+          # Verify the structure in detail
           echo "=== Deployment structure ==="
           ls -la ./deployment/
-          echo "=== .next directory ==="
+          echo "=== .next directory structure ==="
           ls -la ./deployment/.next/
+          echo "=== .next/server directory ==="
+          ls -la ./deployment/.next/server/ | head -10
           echo "=== BUILD_ID file ==="
           cat ./deployment/.next/BUILD_ID
+          echo "=== build-manifest.json exists ==="
+          ls -la ./deployment/.next/build-manifest.json
           echo "=== Updated Package.json content ==="
           cat ./deployment/package.json | grep -A 5 -B 5 '"start"'
           echo "=== App.js exists ==="
           ls -la ./deployment/app.js
-          echo "=== Node modules exists ==="
-          ls -la ./deployment/node_modules/ | head -10
-          echo "=== Next module exists ==="
+          echo "=== Node modules/next exists ==="
           ls -la ./deployment/node_modules/next/ | head -5 || echo "Next module not found"
+          echo "=== Total deployment size ==="
+          du -sh ./deployment/
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
