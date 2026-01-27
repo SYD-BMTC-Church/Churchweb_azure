@@ -46,7 +46,7 @@ jobs:
           # Copy only production node_modules (smaller)
           cp -r node_modules ./deployment/
           cp package*.json ./deployment/
-          cp next.config.ts ./deployment/
+          cp next.config.js ./deployment/
           cp tsconfig.json ./deployment/
           cp tailwind.config.ts ./deployment/
           cp postcss.config.mjs ./deployment/
