@@ -29,8 +29,10 @@ jobs:
           mkdir -p ./deployment
           # Copy ALL standalone files (includes server.js, package.json, .next/, node_modules/)
           cp -r .next/standalone/* ./deployment/
+          # Ensure .next/static directory exists before copying
+          mkdir -p ./deployment/.next/static
           # Copy static files to the correct location in standalone .next
-          cp -r .next/static ./deployment/.next/static
+          cp -r .next/static/* ./deployment/.next/static/ 2>/dev/null || echo "No static files to copy"
           # Copy public files
           cp -r public ./deployment/public
           # Copy web.config for Azure
