@@ -23,7 +23,7 @@ jobs:
           npm install
           npm run build
 
-      - name: Prepare deployment package with dependencies
+      - name: Prepare deployment package without node_modules
         run: |
           # Create deployment directory
           mkdir -p ./deployment
@@ -32,11 +32,10 @@ jobs:
           ls -la .next/ | head -10
           echo "BUILD_ID content:"
           cat .next/BUILD_ID
-          # Copy source files and built application
+          # Copy source files and built application (NO node_modules)
           cp -r .next ./deployment/
           cp -r public ./deployment/
           cp -r src ./deployment/
-          cp -r node_modules ./deployment/
           cp package*.json ./deployment/
           cp next.config.ts ./deployment/
           cp tsconfig.json ./deployment/
@@ -45,6 +44,8 @@ jobs:
           cp components.json ./deployment/
           cp web.config ./deployment/
           cp app.js ./deployment/
+          cp .deployment ./deployment/
+          cp startup.sh ./deployment/
           # Update package.json to use our custom app.js entry point and set NODE_ENV
           sed -i 's/"start": "next start"/"start": "NODE_ENV=production node app.js"/' ./deployment/package.json
           # Also update the original package.json to ensure consistency
@@ -71,9 +72,11 @@ jobs:
           cat ./deployment/package.json | grep -A 5 -B 5 '"start"'
           echo "=== App.js exists ==="
           ls -la ./deployment/app.js
-          echo "=== Node modules/next exists ==="
-          ls -la ./deployment/node_modules/next/ | head -5 || echo "Next module not found"
-          echo "=== Total deployment size ==="
+          echo "=== .deployment file ==="
+          cat ./deployment/.deployment
+          echo "=== startup.sh file ==="
+          cat ./deployment/startup.sh
+          echo "=== Total deployment size (without node_modules) ==="
           du -sh ./deployment/
 
       - name: Upload artifact for deployment job
