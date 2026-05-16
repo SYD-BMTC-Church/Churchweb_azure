@@ -3,6 +3,7 @@ import { compile, run } from "@mdx-js/mdx";
 import { Fragment, useEffect, useState } from "react";
 import * as runtime from "react/jsx-runtime";
 import LucidIcon from "./icon";
+import Image from "next/image";
 
 interface MDXRendererProps {
   markdown: string | undefined;
@@ -20,12 +21,11 @@ export default function MDXRenderer({ markdown }: MDXRendererProps) {
         }
         // Ensure markdown is a string
         if (typeof markdown !== "string") {
-          console.error("Markdown content is not a string:", markdown);
+          console.error("Markdown content is not a string");
           return;
         }
-        console.log("Compiling MDX content...", markdown);
         // Compile the markdown to MDX
-        const compiledCode = await compile(markdown, {
+        const compiledCode = await compile(HTMLTOJSX(markdown), {
           outputFormat: "function-body",
         });
         const mdxModule = await run(String(compiledCode), runtime);
@@ -66,6 +66,27 @@ export default function MDXRenderer({ markdown }: MDXRendererProps) {
                 Icon(props: any) {
                   return <LucidIcon {...props} />;
                 },
+                img: ({ src, alt }: { src: string; alt: string }) => (
+                  <Image src={src} alt={alt} fill className="object-cover" />
+                ),
+                a: ({
+                  children,
+                  href,
+                }: {
+                  children: React.ReactNode;
+                  href: string;
+                }) => {
+                  return (
+                    <a
+                      href={href}
+                      className="text-primary underline hover:text-primary/80 transition-colors duration-200"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {children}
+                    </a>
+                  );
+                },
               }}
             />
           );
@@ -79,4 +100,48 @@ export default function MDXRenderer({ markdown }: MDXRendererProps) {
   }, [markdown]);
 
   return <Content />;
+}
+
+function HTMLTOJSX(input: string) {
+  if (!input) return "";
+
+  let html = input.toString();
+
+  // Convert class → className, for → htmlFor
+  html = html.replace(/\bclass=/g, "className=");
+  html = html.replace(/\bfor=/g, "htmlFor=");
+
+  // Convert kebab-case to camelCase, but ignore aria-* and data-*
+  html = html.replace(/(\s)([a-zA-Z0-9\-]+)=/g, function (_, space, attr) {
+    if (attr.startsWith("aria-") || attr.startsWith("data-")) {
+      return space + attr + "=";
+    }
+    const camelAttr = attr.replace(/-([a-z])/g, (_: string, char: string) =>
+      char.toUpperCase(),
+    );
+    return space + camelAttr + "=";
+  });
+
+  // Self-close void elements (if not already self-closed)
+  const selfClosingTags = [
+    "area",
+    "base",
+    "br",
+    "col",
+    "embed",
+    "hr",
+    "img",
+    "input",
+    "link",
+    "meta",
+    "source",
+    "track",
+    "wbr",
+  ];
+  selfClosingTags.forEach((tag) => {
+    const regex = new RegExp(`<${tag}([^>/]*)>(?!</${tag}>)`, "gi");
+    html = html.replace(regex, `<${tag}$1 />`);
+  });
+
+  return html;
 }

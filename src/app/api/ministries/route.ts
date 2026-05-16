@@ -2,7 +2,7 @@ import { getAllFromSheet } from "@/lib/sheetHelper";
 import { NextRequest, NextResponse } from "next/server";
 
 export interface Ministry {
-  CalendarId: string;
+  CalendarId?: string;
   Image: string;
   HeroTitle: string;
   About: string;
@@ -11,11 +11,12 @@ export interface Ministry {
     title: string;
     details: string;
   }[];
+  Contact?: string;
 }
 export async function GET(request: NextRequest) {
   try {
     const org = request.nextUrl.searchParams.get("org") || "";
-    const result = await getAllFromSheet(`${org}!A1:E2`);
+    const result = await getAllFromSheet(`${org}!A1:F2`);
     const ministries: Ministry = result.map((item) => ({
       ...(item as any),
       Image: convertToDriveDirectLink(item.Image || ""),
@@ -30,7 +31,7 @@ export async function GET(request: NextRequest) {
         success: false,
         message: "Failed to fetch data. Please try again later.",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

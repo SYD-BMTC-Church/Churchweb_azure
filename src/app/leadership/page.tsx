@@ -9,6 +9,8 @@ import Image from "next/image";
 import FormerVicarsPage from "./formerVicarsPage";
 import axios from "axios";
 import { navUrl } from "@/lib/constant";
+import MDXRenderer from "@/lib/mdx-helper";
+import Loading from "@/components/loading";
 interface CommitteeMember {
   Sector: string;
   MemberName: string;
@@ -16,12 +18,16 @@ interface CommitteeMember {
   Image: string;
 }
 export default function Page() {
+  const [loading, setLoading] = useState(true);
   const [committeeMembers, setCommitteeMembers] = useState<CommitteeMember[]>(
-    []
+    [],
   );
+
   useEffect(() => {
-    getCommitteeMembers();
+    setLoading(true);
+    Promise.all([getCommitteeMembers()]).then(() => setLoading(false));
   }, []);
+
   const getCommitteeMembers = async () => {
     try {
       const response = await axios.get("/api/about/leadership");
@@ -30,14 +36,16 @@ export default function Page() {
       console.error("Error fetching former vicars:", error);
     }
   };
-  return (
+  return loading ? (
+    <Loading className="h-screen" />
+  ) : (
     <main className="min-h-screen">
       {/* Hero Section */}
       <HeroSection
-        imageSrc="/images/church-altar.png"
-        altText="Mar Thoma Church Sydney Altar"
+        imageSrc="https://drive.google.com/uc?export=view&id=1iHoUEbn2H6YYkbOdKbI-aLQvi5fof9UV"
+        altText="Bethel Mar Thoma Church Sydney Altar"
         title="Leadership"
-        subText="Mar Thoma Church Sydney has been blessed with dedicated vicars and leaders who have guided our congregation with wisdom and compassion. We honor their service and the lasting impact they have made on our community."
+        subText="Bethel Mar Thoma Church Sydney has been blessed with dedicated vicars and leaders who have guided our congregation with wisdom and compassion. We honor their service and the lasting impact they have made on our community."
       />
 
       {/* Breadcrumb */}
@@ -64,13 +72,14 @@ export default function Page() {
                 <h3 className="text-xl font-bold mb-4">President</h3>
                 {committeeMembers[0] && (
                   <div className="flex flex-col md:flex-row gap-6 items-center">
-                    <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-primary/20">
-                      <Image
+                    <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-primary/20 content-center justify-items-center">
+                      <MDXRenderer markdown={committeeMembers[0].Image} />
+                      {/* <Image
                         src={committeeMembers[0].Image}
                         alt={committeeMembers[0].MemberName}
                         fill
                         className="object-cover"
-                      />
+                      /> */}
                     </div>
                     <div>
                       <h4 className="font-bold">
@@ -104,8 +113,8 @@ export default function Page() {
                         acc[member.Sector].push(member);
                         return acc;
                       },
-                      {}
-                    )
+                      {},
+                    ),
                 ).map(([sector, members]) => (
                   <div key={sector} className="mb-8">
                     <h4 className="text-lg font-semibold mb-2 text-primary">
@@ -115,7 +124,7 @@ export default function Page() {
                       {members.map((member, index) => (
                         <div key={index} className="flex items-center gap-4">
                           <div className="w-16 h-16 rounded-full overflow-hidden bg-muted flex items-center justify-center">
-                            <UserRound />
+                            <MDXRenderer markdown={member.Image} />
                           </div>
                           <div>
                             <h4 className="font-bold">{member.MemberName}</h4>

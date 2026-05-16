@@ -1,4 +1,5 @@
 "use client";
+import { parsonageAddress } from "@/lib/constant";
 import { Separator } from "@radix-ui/react-separator";
 import axios from "axios";
 import {
@@ -14,24 +15,19 @@ import { useEffect, useState } from "react";
 
 export default function Footer() {
   const [contact, setContact] = useState<{
-    AddressTitle: string;
-    MapLink: string;
-    Address: string;
     Phone: string;
     Email: string;
   }>({
-    AddressTitle: "",
-    MapLink: "",
-    Address: "",
     Phone: "",
     Email: "",
   });
+
   useEffect(() => {
     getContactDetails();
   }, []);
+
   const getContactDetails = async () => {
     await axios.get("/api/contact-details").then((response) => {
-      console.log("Response from /api/home:", response.data[0]);
       if (response.data && response.data[0] && response.data[0]) {
         setContact(response.data[0]);
       } else {
@@ -40,7 +36,7 @@ export default function Footer() {
     });
   };
   return (
-    <footer className="bg-primary text-primary-foreground py-12">
+    <footer className="bg-primary text-primary-foreground py-12 mt-12">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
@@ -48,7 +44,7 @@ export default function Footer() {
             <address className="not-italic space-y-2">
               <p className="flex items-center gap-2">
                 <MapPin size={16} />
-                {contact.Address}
+                {parsonageAddress.Address}
               </p>
               <p className="flex items-center gap-2">
                 <Phone size={16} />
@@ -62,7 +58,7 @@ export default function Footer() {
           </div>
           <div>
             <h3 className="text-xl font-cinzel font-bold mb-4">
-              Mar Thoma Church
+              Bethel Mar Thoma Church
             </h3>
             <p className="mb-4">
               A community of faith, hope, and love in Sydney, Australia.
@@ -93,8 +89,8 @@ export default function Footer() {
         <Separator className="my-8 bg-primary-foreground/20" />
         <div className="text-center text-sm text-primary-foreground/70">
           <p>
-            © {new Date().getFullYear()} Mar Thoma Church Sydney. All rights
-            reserved.
+            © {new Date().getFullYear()} Bethel Mar Thoma Church, Sydney. All
+            rights reserved.
           </p>
         </div>
       </div>

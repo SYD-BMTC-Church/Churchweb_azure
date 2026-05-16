@@ -9,9 +9,11 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
+  churchAddress,
   navigationMenu,
   NavigationMenuItem,
   navUrl,
+  parsonageAddress,
   requestForms,
 } from "@/lib/constant";
 import MDXRenderer from "@/lib/mdx-helper";
@@ -23,6 +25,7 @@ import { useEffect, useState } from "react";
 import PageLayout from "./page-layout";
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
   const [MessagefromtheVicar, setMessagefromtheVicar] = useState<{
     message: string | undefined;
     image: string | undefined;
@@ -31,27 +34,22 @@ export default function Home() {
     image: undefined,
   });
   const [contact, setContact] = useState<{
-    AddressTitle: string;
-    MapLink: string;
-    Address: string;
     Phone: string;
     Email: string;
   }>({
-    AddressTitle: "",
-    MapLink: "",
-    Address: "",
     Phone: "",
     Email: "",
   });
 
   useEffect(() => {
-    fetchMarkdown();
-    getContactDetails();
+    setLoading(true);
+    Promise.all([fetchMarkdown(), getContactDetails()]).then(() =>
+      setLoading(false),
+    );
   }, []);
 
   const fetchMarkdown = async () => {
     await axios.get("/api/home").then((response) => {
-      console.log("Response from /api/home:", response.data[0]);
       if (response.data && response.data[0] && response.data[0]) {
         setMessagefromtheVicar({
           message: response.data[0].Message,
@@ -65,7 +63,6 @@ export default function Home() {
 
   const getContactDetails = async () => {
     await axios.get("/api/contact-details").then((response) => {
-      console.log("Response from /api/home:", response.data[0]);
       if (response.data && response.data[0] && response.data[0]) {
         setContact(response.data[0]);
       } else {
@@ -77,8 +74,8 @@ export default function Home() {
     <PageLayout
       heroSectionProps={{
         imageSrc: "/images/church1.jpeg",
-        altText: "Mar Thoma Church Sydney Altar",
-        title: "Welcome to Mar Thoma Church Sydney",
+        altText: "Bethel Mar Thoma Church Sydney Altar",
+        title: "Welcome to Bethel Mar Thoma Church Sydney",
         subText:
           "A community of faith, hope, and love. Join us in worship and fellowship.",
         children: (
@@ -87,7 +84,7 @@ export default function Home() {
               href={
                 navigationMenu.find(
                   (item: NavigationMenuItem) =>
-                    item.label === "Worship and Events"
+                    item.label === "Worship and Events",
                 )?.url || ""
               }
               passHref
@@ -119,6 +116,7 @@ export default function Home() {
           </div>
         ),
       }}
+      loading={loading}
       breadcrumbItems={[{ label: "Home", href: "/" }, navUrl("About")]}
     >
       {/* Hero Section */}
@@ -151,7 +149,7 @@ export default function Home() {
       </section>
 
       {/* Message from Vicar */}
-      <section className="py-16 bg-background">
+      <section className="py-12 bg-background">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="md:w-1/3">
@@ -181,7 +179,7 @@ export default function Home() {
       <Separator />
 
       {/* Location Section */}
-      <section className="py-16 bg-muted/30">
+      <section className="pt-12 bg-muted/30">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12 text-primary">
             Find Us
@@ -190,7 +188,7 @@ export default function Home() {
             <div className="md:w-1/2">
               <div className="h-full bg-muted rounded-lg overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3313.777223117319!2d150.8598136757075!3d-33.843855373236266!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b12970cec9961e3%3A0xaf5894cc2820cede!2sBethel%20Mar%20Thoma%20Church%20Sydney!5e0!3m2!1sen!2sin!4v1746607494800!5m2!1sen!2sin"
+                  src={churchAddress.iframeSrc}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -210,9 +208,9 @@ export default function Home() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <Link href={contact.MapLink} target="_blank">
-                    <p className="font-medium">{contact.AddressTitle}</p>
-                    {contact.Address.split(", ").map((line) => (
+                  <Link href={churchAddress.MapLink} target="_blank">
+                    <p className="font-medium">{churchAddress.AddressTitle}</p>
+                    {churchAddress.Address.split(", ").map((line) => (
                       <p key={line} className="text-primary underline">
                         {line},
                       </p>
@@ -227,13 +225,38 @@ export default function Home() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p>Phone: {contact.Phone}</p>
-                  <p>Email: {contact.Email}</p>
+                  <p>
+                    {"Phone: "}
+                    <Link
+                      className="text-primary underline"
+                      href={`tel:${contact.Phone}`}
+                    >
+                      {contact.Phone}
+                    </Link>
+                  </p>
+                  <p>
+                    {"Email: "}
+                    <Link
+                      className="text-primary underline"
+                      href={`mailto:${contact.Email}`}
+                    >
+                      {contact.Email}
+                    </Link>
+                  </p>
+                  <p>
+                    {`${parsonageAddress.AddressTitle}: `}
+                    <Link
+                      className="text-primary underline"
+                      href={parsonageAddress.MapLink}
+                    >
+                      {parsonageAddress.Address}
+                    </Link>
+                  </p>
                 </CardContent>
                 <CardFooter>
                   <Link
                     className="w-full"
-                    href={contact.MapLink}
+                    href={churchAddress.MapLink}
                     target="_blank"
                     passHref
                   >

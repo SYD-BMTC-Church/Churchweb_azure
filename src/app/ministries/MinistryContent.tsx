@@ -8,11 +8,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import LucidIcon from "@/lib/icon";
 import MDXRenderer from "@/lib/mdx-helper";
 import { toPascalCase } from "@/lib/utils";
+import Loading from "@/components/loading";
 
 export default function MinistryContent({ pageTitle }: { pageTitle: string }) {
   const [Content, setContent] = useState<Ministry>();
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    getContent();
+    setLoading(true);
+    Promise.all([getContent()]).then(() => setLoading(false));
   }, []);
   const getContent = async () => {
     try {
@@ -22,14 +26,16 @@ export default function MinistryContent({ pageTitle }: { pageTitle: string }) {
       console.error(`Error fetching ${pageTitle} content:`, error);
     }
   };
-  return (
-    Content?.About && (
+  return loading ? (
+    <Loading className="h-screen" />
+  ) : (
+    Content && (
       <PageLayout
         heroSectionProps={{
           title: pageTitle,
           subText: Content.HeroTitle,
           imageSrc: Content.Image,
-          altText: `${pageTitle} at Mar Thoma Church Sydney`,
+          altText: `${pageTitle} at Bethel Mar Thoma Church Sydney`,
         }}
         breadcrumbItems={[{ label: "Home", href: "/" }, navUrl(`${pageTitle}`)]}
       >
@@ -39,11 +45,33 @@ export default function MinistryContent({ pageTitle }: { pageTitle: string }) {
           //create a markdown of the above content with a new design add icons and make it better
           content={Content.GetInvolved}
         />
-
+        {Content.Contact && <ContactSection content={Content.Contact} />}
         {/* Schedule Section */}
-        <ScheduleSection calenderId={Content.CalendarId} />
+        {Content.CalendarId && (
+          <ScheduleSection calenderId={Content.CalendarId} />
+        )}
       </PageLayout>
     )
+  );
+}
+
+function ContactSection({ content }: { content: string }) {
+  {
+    /* Contact Section */
+  }
+  return (
+    <section className="pt-12 bg-background">
+      <div className="container mx-auto">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-primary mb-6">Contact</h2>
+          <Card>
+            <CardContent className="prose prose-sm max-w-none text-muted-foreground">
+              <MDXRenderer markdown={content} />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -55,7 +83,7 @@ function AboutSection({
   content: string;
 }) {
   return (
-    <section className="py-12 bg-background">
+    <section className="pt-12 bg-background">
       <div className="container mx-auto">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-primary mb-6">
@@ -77,9 +105,8 @@ function GetInvolvedSection({
     icon: string;
   }[];
 }) {
-  console.log("GetInvolvedSection Content:", content);
   return (
-    <section className="py-12 bg-background">
+    <section className="pt-12 bg-background">
       <div className="container mx-auto">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-primary mb-6">Get Involved</h2>
@@ -131,7 +158,7 @@ const ScheduleSection = ({ calenderId }: { calenderId: string }) => {
   const fetchSchedule = async () => {
     try {
       const response = await axios.get(
-        `/api/calendar-timing?calendar_id=${calenderId}`
+        `/api/calendar-timing?calendar_id=${calenderId}`,
       );
       setScheduleContent(response.data);
     } catch (error) {
@@ -140,7 +167,7 @@ const ScheduleSection = ({ calenderId }: { calenderId: string }) => {
   };
 
   return (
-    <section className="py-12 bg-muted/30">
+    <section className="pt-12 bg-muted/30">
       <div className="container mx-auto">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12 text-primary">
@@ -218,8 +245,8 @@ const EventCard = ({
                 customDate.start !== customDate.end
                   ? ` - ${customDate.end}`
                   : customDate.until
-                  ? ` - ${customDate.until}`
-                  : ""
+                    ? ` - ${customDate.until}`
+                    : ""
               }`}
           <br />
           {customDate.time}

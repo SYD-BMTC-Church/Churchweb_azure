@@ -21,9 +21,9 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-  title: "Mar Thoma Church Sydney",
+  title: "Bethel Mar Thoma Church Sydney",
   description:
-    "Official website of Mar Thoma Church Sydney - A community of faith, hope, and love",
+    "Official website of Bethel Mar Thoma Church Sydney - A community of faith, hope, and love",
 };
 
 export default function RootLayout({
@@ -59,7 +59,7 @@ function Header() {
               <div className="h-12 w-12 flex items-center justify-center">
                 <Image
                   src="/images/logo.png"
-                  alt="Mar Thoma Church Logo"
+                  alt="Bethel Mar Thoma Church Logo"
                   width={100}
                   height={100}
                   priority

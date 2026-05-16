@@ -16,7 +16,7 @@ export async function GET() {
           {
             label: "History",
             url: "/about/history",
-            description: "The story of Mar Thoma Church Sydney",
+            description: "The story of Bethel Mar Thoma Church Sydney",
           },
           {
             label: "Beliefs",
@@ -37,7 +37,7 @@ export async function GET() {
     ],
     footer: {
       about: {
-        title: "Mar Thoma Church",
+        title: "Bethel Mar Thoma Church",
         description:
           "A community of faith, hope, and love in Sydney, Australia.",
         socialLinks: [
@@ -46,17 +46,7 @@ export async function GET() {
           { platform: "YouTube", url: "#" },
         ],
       },
-      worshipServices: [
-        { day: "Sunday", time: "9:30 AM", language: "English" },
-        { day: "Sunday", time: "11:00 AM", language: "Malayalam" },
-        { day: "Wednesday", time: "7:00 PM", type: "Prayer" },
-      ],
-      contact: {
-        address: "123 Church Street, Sydney, NSW 2000",
-        phone: "(02) 1234 5678",
-        email: "info@marthomachurchsydney.org",
-      },
-      copyright: "© 2025 Mar Thoma Church Sydney. All rights reserved.",
+      copyright: `© ${new Date().getFullYear()} Bethel Mar Thoma Church Sydney. All rights reserved.`,
     },
   };
   return NextResponse.json(data, { status: 200 });

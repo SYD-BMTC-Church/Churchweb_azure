@@ -5,7 +5,7 @@ function SheetDataToJson(data: string[][]) {
   if (!Array.isArray(data) || data.length < 2) return [];
   const [title, ...rows] = data;
   return rows.map((row) =>
-    Object.fromEntries(row.map((item, idx) => [title[idx], item]))
+    Object.fromEntries(row.map((item, idx) => [title[idx], item])),
   );
 }
 
@@ -16,7 +16,7 @@ async function getGlSheetAuth() {
     }
     if (!process.env.PRIVATE_KEY_ID) {
       throw new Error(
-        "PRIVATE_KEY_ID is not defined in environment variables."
+        "PRIVATE_KEY_ID is not defined in environment variables.",
       );
     }
     if (!process.env.PRIVATE_KEY) {
@@ -44,51 +44,6 @@ async function getGlSheetAuth() {
   } catch (error) {
     console.error("Error getting Google Sheets authentication:", error);
     throw new Error("Failed to get Google Sheets authentication.");
-  }
-}
-
-export async function updateData(
-  jwt: any,
-  value: any,
-  sheetName = "Sheet1",
-  row: number
-) {
-  try {
-    const sheets = google.sheets({ version: "v4", auth: jwt });
-    const sheetRange = `${sheetName}!A${row + 1}`;
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: process.env.SHEETS_ID,
-      range: sheetRange,
-      valueInputOption: "USER_ENTERED",
-      requestBody: {
-        values: [JSON.parse(value)],
-      },
-    });
-    console.log(`sucess: ${sheetRange}`);
-    return { sucess: sheetRange };
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-export async function appendData(rowData: any, sheetName = "Sheet1") {
-  // Append data to the sheet
-  try {
-    const auth = await getGlSheetAuth();
-    const glSheets = google.sheets({ version: "v4", auth: auth });
-    const response = await glSheets.spreadsheets.values.append({
-      spreadsheetId: process.env.SHEETS_ID,
-      range: sheetName,
-      valueInputOption: "RAW",
-      insertDataOption: "INSERT_ROWS",
-      requestBody: {
-        values: [rowData],
-      },
-    });
-    return { success: true, data: response.data };
-  } catch (e) {
-    console.error("Error appending data to Google Sheets:", e);
-    return { success: false, error: "Failed to append data to the sheet" };
   }
 }
 

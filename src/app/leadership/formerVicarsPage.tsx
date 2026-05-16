@@ -37,13 +37,20 @@ export default function FormerVicarsPage() {
         <Card key={index} className="overflow-hidden">
           <div className="relative h-72 w-full">
             <Image
-              style={{ objectFit: "contain" }}
+              // style={{ objectFit: "contain" }}
               src={vicar.image}
               alt={vicar.name}
               fill
               className="object-cover"
-              loading="lazy" // Add lazy loading here
+              priority
             />
+            {/* <Image
+                      src={imageSrc}
+                      alt={altText}
+                      fill
+                      className="object-cover"
+                      priority
+                    /> */}
           </div>
           <CardHeader>
             <CardTitle>{vicar.name}</CardTitle>

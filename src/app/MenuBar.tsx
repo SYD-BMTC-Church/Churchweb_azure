@@ -74,13 +74,15 @@ export function MenuBar() {
                                   )}
                                   {subItem.label}
                                 </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                  {subItem.description}
-                                </p>
+                                {subItem.description != undefined && (
+                                  <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                                    {subItem.description}
+                                  </p>
+                                )}
                               </Link>
                             </NavigationMenuLink>
                           </li>
-                        )
+                        ),
                       )}
                     </ul>
                   </NavigationMenuContent>

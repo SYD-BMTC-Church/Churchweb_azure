@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { HeartHandshake, Users } from "lucide-react";
 import Link from "next/link";
-import LucidIcon from "./icon";
+
 export interface NavigationMenuItem {
   label: string;
   url?: string;
@@ -127,3 +127,17 @@ export const requestForms = [
     buttonLabel: "Submit Request",
   },
 ];
+
+export const parsonageAddress = {
+  AddressTitle: "Parsonage",
+  MapLink: "https://maps.app.goo.gl/UkTG7DZf1MuWRpe96",
+  Address: "3 Reservoir Rd, Blacktown NSW 2148, Australia",
+};
+
+export const churchAddress = {
+  AddressTitle: "Bethel Mar Thoma Church",
+  MapLink: "https://maps.app.goo.gl/sx7P4eyy4P4A6xXv9",
+  Address: "1650 The Horsley Dr, Horsley Park NSW 2175, Australia",
+  iframeSrc:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3313.777223117319!2d150.8598136757075!3d-33.843855373236266!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b12970cec9961e3%3A0xaf5894cc2820cede!2sBethel%20Mar%20Thoma%20Church%20Sydney!5e0!3m2!1sen!2sin!4v1746607494800!5m2!1sen!2sin",
+};

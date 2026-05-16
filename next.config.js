@@ -2,12 +2,16 @@
 const nextConfig = {
   /* config options here */
   images: {
-    domains: ["drive.google.com"],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "sydneymarthoma.church",
         pathname: "/wp-content/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "drive.google.com",
+        pathname: "/**",
       },
     ],
   },

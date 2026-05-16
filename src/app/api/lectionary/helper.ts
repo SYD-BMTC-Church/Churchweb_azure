@@ -57,6 +57,20 @@ export default async function getLectionaryList() {
   }
 }
 
+export async function getTodays(): Promise<string> {
+  try {
+    const response = await getLectionaryList();
+    return (
+      JSON.parse(response.toString()).lectionaryList[
+        new Date().toISOString()
+      ] || []
+    );
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return ""; // Return an empty string on error
+  }
+}
+
 async function fetchData(): Promise<string> {
   try {
     const response = await axios.get("https://marthoma.in/lectionary/");

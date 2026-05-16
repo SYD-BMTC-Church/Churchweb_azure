@@ -1,8 +1,9 @@
 "use client";
 
-import type React from "react";
 import { useState } from "react";
-
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, Send } from "lucide-react";
 
 import HeroSection from "@/components/heroSection";
@@ -16,88 +17,94 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { navUrl } from "@/lib/constant";
 
-export default function PrayerRequestPage() {
-  const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    prayerRequest: "",
-    requestType: "personal",
-    isUrgent: false,
-    isConfidential: false,
-    shareWithPrayerTeam: true,
-  });
+const prayerRequestSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  emailOrPhone: z
+    .string()
+    .min(1, "Email or phone is required")
+    .refine(
+      (value) => {
+        const emailOk = z.string().email().safeParse(value).success;
+        const phoneOk = /^(?:\+61|0)\(?[23478]\)?\d{8}$/.test(value);
+        return emailOk || phoneOk;
+      },
+      { message: "Enter a valid email address or phone number" },
+    ),
+  prayerRequest: z
+    .string()
+    .min(10, "Prayer request must be at least 10 characters")
+    .max(1000, "Prayer request must be under 1000 characters"),
+  requestType: z.enum(["personal", "family", "friend", "other"]),
+  isConfidential: z.boolean(),
+});
 
+type PrayerRequestValues = z.infer<typeof prayerRequestSchema>;
+
+export default function PrayerRequestPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
     success: boolean;
     message: string;
   } | null>(null);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({ ...prev, [name]: value }));
-  };
+  const form = useForm<PrayerRequestValues>({
+    resolver: zodResolver(prayerRequestSchema),
+    defaultValues: {
+      name: "",
+      emailOrPhone: "",
+      prayerRequest: "",
+      requestType: "personal",
+      isConfidential: false,
+    },
+    mode: "onBlur",
+  });
 
-  const handleCheckboxChange = (name: string, checked: boolean) => {
-    setFormState((prev) => ({ ...prev, [name]: checked }));
-  };
-
-  const handleRadioChange = (value: string) => {
-    setFormState((prev) => ({ ...prev, requestType: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (values: PrayerRequestValues) => {
     setIsSubmitting(true);
     setSubmitResult(null);
 
+    const formURL =
+      "https://docs.google.com/forms/d/e/1FAIpQLScEZs4CpM_srd91pA0DGXwWrO7y-j2OjUFo1wAspAHnRStIWQ/formResponse";
+
+    const formData = new URLSearchParams();
+    formData.append("entry.1932960689", values.name);
+    formData.append("entry.2028445071", values.emailOrPhone);
+    formData.append("entry.147613505", values.requestType);
+    formData.append("entry.737150498", values.prayerRequest);
+    formData.append("entry.1622986577", values.isConfidential ? "Yes" : "No");
+
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Commented out actual API call for the user to fill in
-      /*
-      const response = await fetch('/api/prayer-request', {
-        method: 'POST',
+      await fetch(formURL, {
+        method: "POST",
+        mode: "no-cors",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: JSON.stringify(formState),
-      })
-      
-      const data = await response.json()
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong')
-      }
-      */
+        body: formData.toString(),
+      });
 
-      // Success simulation
       setSubmitResult({
         success: true,
         message:
           "Your prayer request has been submitted. Our prayer team will be praying for you.",
       });
-      setFormState({
-        name: "",
-        email: "",
-        phone: "",
-        prayerRequest: "",
-        requestType: "personal",
-        isUrgent: false,
-        isConfidential: false,
-        shareWithPrayerTeam: true,
-      });
+
+      form.reset();
     } catch (error) {
       setSubmitResult({
         success: false,
@@ -113,25 +120,17 @@ export default function PrayerRequestPage() {
 
   return (
     <main className="min-h-screen">
-      {/* Hero Section */}
       <HeroSection
-        imageSrc="/images/church-altar.png"
-        altText="Mar Thoma Church Sydney Altar"
+        imageSrc="https://drive.google.com/uc?export=view&id=1iHoUEbn2H6YYkbOdKbI-aLQvi5fof9UV"
+        altText="Bethel Mar Thoma Church Sydney Altar"
         title="Prayer Request"
         subText="Share your prayer needs with our church community"
       />
 
-      {/* Breadcrumb */}
       <div className="bg-muted/50 py-3">
         <div className="container mx-auto">
           <Breadcrumb
-            items={[
-              {
-                label: "Home",
-                href: "/",
-              },
-              navUrl("Prayer Request"),
-            ]}
+            items={[{ label: "Home", href: "/" }, navUrl("Prayer Request")]}
           />
         </div>
       </div>
@@ -166,169 +165,172 @@ export default function PrayerRequestPage() {
                   Fill out the form below to share your prayer needs with us
                 </CardDescription>
               </CardHeader>
+
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Name</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formState.name}
-                        onChange={handleChange}
-                        placeholder="Your name"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formState.email}
-                        onChange={handleChange}
-                        placeholder="Your email address"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone (Optional)</Label>
-                    <Input
-                      id="phone"
-                      name="phone"
-                      value={formState.phone}
-                      onChange={handleChange}
-                      placeholder="Your phone number"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Request Type</Label>
-                    <RadioGroup
-                      value={formState.requestType}
-                      onValueChange={handleRadioChange}
-                      className="flex flex-col space-y-1"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="personal" id="personal" />
-                        <Label htmlFor="personal">Personal</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="family" id="family" />
-                        <Label htmlFor="family">Family</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="friend" id="friend" />
-                        <Label htmlFor="friend">Friend</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="other" id="other" />
-                        <Label htmlFor="other">Other</Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="prayerRequest">Prayer Request</Label>
-                    <Textarea
-                      id="prayerRequest"
-                      name="prayerRequest"
-                      value={formState.prayerRequest}
-                      onChange={handleChange}
-                      placeholder="Please share your prayer request here"
-                      rows={5}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="isUrgent"
-                        checked={formState.isUrgent}
-                        onCheckedChange={(checked) =>
-                          handleCheckboxChange("isUrgent", checked as boolean)
-                        }
-                      />
-                      <Label htmlFor="isUrgent">
-                        This is an urgent request
-                      </Label>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="isConfidential"
-                        checked={formState.isConfidential}
-                        onCheckedChange={(checked) =>
-                          handleCheckboxChange(
-                            "isConfidential",
-                            checked as boolean
-                          )
-                        }
-                      />
-                      <Label htmlFor="isConfidential">
-                        Keep this request confidential (only clergy will see it)
-                      </Label>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="shareWithPrayerTeam"
-                        checked={formState.shareWithPrayerTeam}
-                        onCheckedChange={(checked) =>
-                          handleCheckboxChange(
-                            "shareWithPrayerTeam",
-                            checked as boolean
-                          )
-                        }
-                      />
-                      <Label htmlFor="shareWithPrayerTeam">
-                        Share with the prayer team
-                      </Label>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Lock className="h-4 w-4" />
-                    <p>
-                      Your privacy is important to us. We will handle your
-                      information with care.
-                    </p>
-                  </div>
-
-                  {submitResult && (
-                    <div
-                      className={`p-4 rounded-md ${
-                        submitResult.success
-                          ? "bg-green-50 text-green-800"
-                          : "bg-red-50 text-red-800"
-                      }`}
-                    >
-                      {submitResult.message}
-                    </div>
-                  )}
-
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={isSubmitting}
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6"
                   >
-                    {isSubmitting ? (
-                      <span className="flex items-center gap-2">
-                        <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
-                        Submitting...
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-2">
-                        <Send className="h-4 w-4" />
-                        Submit Prayer Request
-                      </span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Name</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Your name"
+                                autoComplete="name"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="emailOrPhone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email or Phone</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Your email address or phone number"
+                                autoComplete="email"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="requestType"
+                      render={({ field }) => (
+                        <FormItem className="space-y-3">
+                          <FormLabel>Request Type</FormLabel>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              value={field.value}
+                              className="flex flex-col space-y-1"
+                            >
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem
+                                  value="personal"
+                                  id="personal"
+                                />
+                                <label htmlFor="personal">Personal</label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="family" id="family" />
+                                <label htmlFor="family">Family</label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="friend" id="friend" />
+                                <label htmlFor="friend">Friend</label>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="other" id="other" />
+                                <label htmlFor="other">Other</label>
+                              </div>
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="prayerRequest"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Prayer Request</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Please share your prayer request here"
+                              rows={5}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Please avoid sharing highly sensitive personal data.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="isConfidential"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={(checked) =>
+                                field.onChange(Boolean(checked))
+                              }
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              Keep this request confidential (only clergy will
+                              see it)
+                            </FormLabel>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Lock className="h-4 w-4" />
+                      <p>
+                        Your privacy is important to us. We will handle your
+                        information with care.
+                      </p>
+                    </div>
+
+                    {submitResult && (
+                      <div
+                        className={`p-4 rounded-md ${
+                          submitResult.success
+                            ? "bg-green-50 text-green-800"
+                            : "bg-red-50 text-red-800"
+                        }`}
+                      >
+                        {submitResult.message}
+                      </div>
                     )}
-                  </Button>
-                </form>
+
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center gap-2">
+                          <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                          Submitting...
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-2">
+                          <Send className="h-4 w-4" />
+                          Submit Prayer Request
+                        </span>
+                      )}
+                    </Button>
+                  </form>
+                </Form>
               </CardContent>
             </Card>
           </div>

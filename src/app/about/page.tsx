@@ -8,6 +8,7 @@ import { navUrl } from "@/lib/constant";
 import PageLayout from "../page-layout";
 import Icon from "@/lib/icon";
 import LucidIcon from "@/lib/icon";
+import Loading from "@/components/loading";
 
 interface AboutContent {
   Title: string;
@@ -19,9 +20,11 @@ interface AboutContent {
 
 export default function AboutPage() {
   const [aboutContent, setAboutContent] = useState<AboutContent[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchMarkdown();
+    setLoading(true);
+    Promise.all([fetchMarkdown()]).then(() => setLoading(false));
   }, []);
 
   const fetchMarkdown = async () => {
@@ -38,15 +41,17 @@ export default function AboutPage() {
   return (
     <PageLayout
       heroSectionProps={{
-        imageSrc: "/images/church-altar.png",
-        altText: "Mar Thoma Church Sydney Altar",
+        imageSrc:
+          "https://drive.google.com/uc?export=view&id=1iHoUEbn2H6YYkbOdKbI-aLQvi5fof9UV",
+        altText: "Bethel Mar Thoma Church Sydney Altar",
         title: "About Us",
         subText: "Learn more about our church, its history, and our mission.",
       }}
+      loading={loading}
       breadcrumbItems={[{ label: "Home", href: "/" }, navUrl("About")]}
     >
       {/* Navigation Links */}
-      <div className="sticky top-[73px] bg-background z-30 border-b">
+      <div className="sticky top-18.25 bg-background z-30 border-b">
         <div className="container mx-auto py-4">
           <div className="flex justify-center space-x-2 overflow-x-auto">
             <a
@@ -75,7 +80,7 @@ export default function AboutPage() {
       </div>
 
       {/* Content Sections */}
-      <div className="container mx-auto py-12">
+      <div className="container mx-auto pt-12">
         {aboutContent.map((section) => (
           <section
             key={section.Title}
@@ -95,7 +100,7 @@ export default function AboutPage() {
                     <div>
                       <MDXRenderer markdown={section.Data} />
                     </div>
-                    <div className="relative h-[300px] md:h-full rounded-lg overflow-hidden">
+                    <div className="relative h-75 md:h-full rounded-lg overflow-hidden">
                       <Image
                         src={section.Image}
                         alt={section.Tag}
