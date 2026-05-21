@@ -48,7 +48,7 @@ export default function MinistryContent({ pageTitle }: { pageTitle: string }) {
         {Content.Contact && <ContactSection content={Content.Contact} />}
         {/* Schedule Section */}
         {Content.CalendarId && (
-          <ScheduleSection calenderId={Content.CalendarId} />
+          <ScheduleSection calendarId={Content.CalendarId} />
         )}
       </PageLayout>
     )
@@ -135,31 +135,31 @@ function GetInvolvedSection({
 }
 
 interface ScheduleItem {
+  id: string;
   summary: string;
   description?: string | null;
   location?: string | null;
-  start: string; // ISO date string
-  end: string; // ISO date string
-  recurrence?: {
-    frequency: string;
-    interval: number;
-    BYDAY?: string[];
-    until?: string;
-  };
+  start: string | null;
+  end: string | null;
+  isRecurring?: boolean;
+  recurrenceLabel?: string | null;
+  until?: string | null;
+  htmlLink?: string | null;
 }
 
-const ScheduleSection = ({ calenderId }: { calenderId: string }) => {
+const ScheduleSection = ({ calendarId }: { calendarId: string }) => {
   const [scheduleContent, setScheduleContent] = useState<ScheduleItem[]>([]);
 
   useEffect(() => {
     fetchSchedule();
-  }, []);
+  }, [calendarId]);
 
   const fetchSchedule = async () => {
     try {
       const response = await axios.get(
-        `/api/calendar-timing?calendar_id=${calenderId}`,
+        `/api/calendar-timing?calendar_id=${encodeURIComponent(calendarId)}`,
       );
+
       setScheduleContent(response.data);
     } catch (error) {
       console.error("Error fetching schedule:", error);
@@ -173,14 +173,15 @@ const ScheduleSection = ({ calenderId }: { calenderId: string }) => {
           <h2 className="text-3xl font-bold text-center mb-12 text-primary">
             Schedule & Activities
           </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {scheduleContent.length === 0 ? (
               <p className="col-span-2 text-center text-muted-foreground">
                 No upcoming events.
               </p>
             ) : (
-              scheduleContent.map((item, index) => (
-                <EventCard key={index} {...item} />
+              scheduleContent.map((item) => (
+                <EventCard key={item.id} {...item} />
               ))
             )}
           </div>
@@ -196,10 +197,13 @@ const EventCard = ({
   location,
   start,
   end,
-  recurrence,
+  isRecurring,
+  recurrenceLabel,
+  until,
 }: ScheduleItem) => {
   const startDt = start ? new Date(start) : null;
   const endDt = end ? new Date(end) : null;
+  const untilDt = until ? new Date(until) : null;
 
   const formatDate = (date: Date) =>
     date.toLocaleDateString("en-AU", {
@@ -207,6 +211,7 @@ const EventCard = ({
       month: "2-digit",
       year: "numeric",
     });
+
   const formatTime = (date: Date) =>
     date.toLocaleTimeString("en-AU", {
       hour: "2-digit",
@@ -214,47 +219,44 @@ const EventCard = ({
       hour12: true,
     });
 
-  const customDate = {
-    start: startDt ? formatDate(startDt) : "N/A",
-    weekday: startDt
-      ? startDt.toLocaleDateString("en-AU", { weekday: "short" })
-      : "N/A",
-    end: endDt ? formatDate(endDt) : "N/A",
-    time:
-      startDt && endDt
-        ? `${formatTime(startDt)} - ${formatTime(endDt)}`
-        : "N/A",
-    //camel case
-    recurring: toPascalCase(recurrence?.frequency || ""),
-    frequency: `Every ${recurrence?.frequency || "day"} ${
-      recurrence?.BYDAY ? ` on ${convertBYDAYToWeekday(recurrence.BYDAY)}` : ""
-    }`,
-    until: recurrence?.until ? formatDate(new Date(recurrence.until)) : null,
-  };
+  const dateText = isRecurring
+    ? recurrenceLabel || "Recurring event"
+    : startDt
+      ? formatDate(startDt)
+      : "Date TBC";
+
+  const untilText = untilDt ? ` until ${formatDate(untilDt)}` : "";
+
+  const timeText =
+    startDt && endDt ? `${formatTime(startDt)} - ${formatTime(endDt)}` : null;
 
   return (
     <Card className="overflow-hidden">
       <CardHeader>
         <CardTitle className="text-lg font-semibold">{summary}</CardTitle>
+
         <p className="text-sm text-muted-foreground">
-          {customDate.recurring
-            ? `Recurring: ${customDate.recurring} ${
-                customDate.until ? ` until ${customDate.until}` : ""
-              }`
-            : `${customDate.start}${
-                customDate.start !== customDate.end
-                  ? ` - ${customDate.end}`
-                  : customDate.until
-                    ? ` - ${customDate.until}`
-                    : ""
-              }`}
-          <br />
-          {customDate.time}
-          <br />
+          {isRecurring ? (
+            <>
+              {dateText}
+              {untilText}
+            </>
+          ) : (
+            dateText
+          )}
+
+          {timeText && (
+            <>
+              <br />
+              {timeText}
+            </>
+          )}
         </p>
       </CardHeader>
+
       <CardContent>
-        <p className="mb-2">{description || ""}</p>
+        {description && <p className="mb-2">{description}</p>}
+
         {location && (
           <p className="text-sm text-muted-foreground">
             <strong>Location:</strong> {location}
