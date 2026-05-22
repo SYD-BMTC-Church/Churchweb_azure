@@ -38,7 +38,7 @@ export default function Footer() {
   return (
     <footer className="bg-primary text-primary-foreground py-12 mt-12">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-lg font-bold mb-4">Contact Us</h3>
             <address className="not-italic space-y-2">
@@ -55,6 +55,26 @@ export default function Footer() {
                 {contact.Email}
               </p>
             </address>
+          </div>
+          <div>
+            <h3 className="text-lg font-bold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/" className="hover:underline transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="hover:underline transition-colors">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy-policy" className="hover:underline transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+            </ul>
           </div>
           <div>
             <h3 className="text-xl font-cinzel font-bold mb-4">
