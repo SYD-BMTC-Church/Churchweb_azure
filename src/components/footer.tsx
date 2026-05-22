@@ -97,8 +97,10 @@ export default function Footer() {
                 <Instagram className="h-5 w-5" />
               </Link>
               <Link
-                href="#"
+                href="https://www.youtube.com/@sydneymarthomachurch"
                 className="text-primary-foreground hover:text-accent transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <Youtube className="h-5 w-5" />
               </Link>
