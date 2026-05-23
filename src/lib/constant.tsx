@@ -100,6 +100,7 @@ export const navigationMenu: NavigationMenuItem[] = [
       },
     ],
   },
+  { label: "Resources", url: "/resources" },
   {
     label: "Donate",
     render: () => (
