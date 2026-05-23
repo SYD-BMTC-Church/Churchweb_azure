@@ -18,7 +18,7 @@ import {
 } from "@/lib/constant";
 import MDXRenderer from "@/lib/mdx-helper";
 import axios from "axios";
-import { Contact, MapPin } from "lucide-react";
+import { Calendar, Church, Clock, Contact, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -40,13 +40,51 @@ export default function Home() {
     Phone: "",
     Email: "",
   });
+  const [upcomingEvents, setUpcomingEvents] = useState<any[]>([]);
 
   useEffect(() => {
     setLoading(true);
-    Promise.all([fetchMarkdown(), getContactDetails()]).then(() =>
+    Promise.all([fetchMarkdown(), getContactDetails(), fetchUpcomingEvents()]).then(() =>
       setLoading(false),
     );
   }, []);
+
+  const fetchUpcomingEvents = async () => {
+    try {
+      // Try multiple calendars to find Holy Communion events
+      const calendarIds = [
+        "c_56a6e0c46fa5f864d1689c4c64d903df60090f3748e6c8f8fe373fb5fb5ba73c",
+        "c_006dcca0d08d706b39da31d4f09a25289f56c71d50be6fbd027631cd21fba6e5",
+        "c_09e72818dd2eee3e5af4a59b53842a559ef129e64601d195e254c733021c979",
+        "c_12c0c33444baf1460937e3ffe666d0db8e4270b7afc3e2dc38d8351a489997b4",
+        "c_5f03a325a4b60f2572185205aa8a0cb5e9feff5db62aa03d67470f08061fc95d",
+        "c_8afaaf875b76d8dd4fcbb69fd2e68759f41679e43e7d75a27b84d4f6758348f6",
+        "c_ad213ef183b68d1376a7d5f73fae7f2bafd88240bc5e8c29af91fff6731df93f",
+        "c_afa76cbdf84dbd4a161f0bc911d79ce6e2454b3066edc22997431367b543b823",
+      ];
+
+      let allEvents: any[] = [];
+      for (const calId of calendarIds) {
+        try {
+          const response = await axios.get("/api/calendar-timing?calendar_id=" + encodeURIComponent(calId + "@group.calendar.google.com") + "&upcoming=true");
+          if (response.data && Array.isArray(response.data)) {
+            allEvents = [...allEvents, ...response.data];
+          }
+        } catch {
+          // Skip calendars that fail
+        }
+      }
+
+      // Filter for Holy Communion events and sort by date
+      const worshipEvents = allEvents
+        .filter((event: any) => event.summary?.toLowerCase().includes("holy communion"))
+        .sort((a: any, b: any) => new Date(a.start).getTime() - new Date(b.start).getTime());
+
+      setUpcomingEvents(worshipEvents.slice(0, 2));
+    } catch (error) {
+      // Silently fail - section won't show if no events available
+    }
+  };
 
   const fetchMarkdown = async () => {
     await axios.get("/api/home").then((response) => {
@@ -121,8 +159,61 @@ export default function Home() {
     >
       {/* Hero Section */}
 
+      {/* Upcoming Worship Times */}
+      {upcomingEvents.length > 0 && (
+        <section className="py-2 bg-background">
+          <div className="container mx-auto max-w-2xl">
+            <h2 className="text-2xl font-bold text-center mb-6 text-primary flex items-center justify-center gap-2">
+              <Church size={18} />
+              Upcoming Worship
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {upcomingEvents.map((event, index) => {
+                const startDate = event.start ? new Date(event.start) : null;
+                return (
+                  <Card key={event.id || index} className="hover:shadow-md transition-shadow border-primary/20">
+                    <CardContent className="flex items-center gap-4 p-4">
+                      <div className="bg-primary/10 p-2 rounded-lg">
+                        <Church size={20} className="text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm">{event.summary}</p>
+                        {startDate && (
+                          <>
+                            <p className="flex items-center gap-1 text-muted-foreground text-xs mt-1">
+                              <Calendar size={12} />
+                              {startDate.toLocaleDateString("en-AU", {
+                                weekday: "short",
+                                day: "numeric",
+                                month: "short",
+                              })}
+                              <span className="mx-1">•</span>
+                              <Clock size={12} />
+                              {startDate.toLocaleTimeString("en-AU", {
+                                hour: "numeric",
+                                minute: "2-digit",
+                                hour12: true,
+                              })}
+                            </p>
+                          </>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+            <div className="text-center mt-4">
+              <Link href="/worship-events" passHref>
+                <Button variant="outline" size="sm">View All Events</Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Quick Links Section */}
-      <section className="py-12 text-primary-foreground bg-primary/10">
+      <section className="py-8 text-primary-foreground bg-primary/10">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
           {requestForms.map((form, index) => (
             <Card

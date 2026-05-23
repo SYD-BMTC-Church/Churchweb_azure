@@ -34,7 +34,7 @@ export default function HeroSection({
         />
       ) : null}
       <div className="relative z-20 container mx-auto h-full flex flex-col items-center justify-center text-center text-white">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-4">{title}</h1>
         <p
           className={`text-base md:text-xl max-w-2xl mx-auto ${
             children ? "mb-8" : ""

@@ -176,8 +176,9 @@ export async function GET(request: NextRequest) {
     const response = await calendar.events.list({
       calendarId,
       timeMin: new Date().toISOString(),
-      singleEvents: false,
-      maxResults: 100,
+      singleEvents: request.nextUrl.searchParams.get("upcoming") === "true",
+      maxResults: request.nextUrl.searchParams.get("upcoming") === "true" ? 10 : 100,
+      orderBy: request.nextUrl.searchParams.get("upcoming") === "true" ? "startTime" : undefined,
     });
 
     const events = response.data.items || [];
