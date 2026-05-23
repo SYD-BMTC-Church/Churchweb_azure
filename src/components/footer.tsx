@@ -70,6 +70,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/resources" className="hover:underline transition-colors">
+                  Resources
+                </Link>
+              </li>
+              <li>
                 <Link href="/privacy-policy" className="hover:underline transition-colors">
                   Privacy Policy
                 </Link>
