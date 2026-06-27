@@ -157,3 +157,62 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Chatbot animations */
+@keyframes chatOpen {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes messageSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-chat-open {
+  animation: chatOpen 0.3s ease-out;
+}
+
+.animate-message-slide-in {
+  animation: messageSlideIn 0.3s ease-out;
+}
+
+.animate-fade-slide-up {
+  animation: fadeSlideUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-fade-slide-up-delay-1 {
+  animation: fadeSlideUp 0.3s ease-out 0.1s both;
+}
+
+.animate-fade-slide-up-delay-2 {
+  animation: fadeSlideUp 0.3s ease-out 0.2s both;
+}
+
+.animate-fade-slide-up-delay-3 {
+  animation: fadeSlideUp 0.3s ease-out 0.3s both;
+}
