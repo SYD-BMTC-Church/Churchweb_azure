@@ -1,3 +1,4 @@
+import Chatbot from "@/components/chatbot";
 import Footer from "@/components/footer";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
@@ -43,6 +44,7 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
+          <Chatbot />
         </ThemeProvider>
       </body>
     </html>
