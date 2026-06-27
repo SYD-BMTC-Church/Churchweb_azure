@@ -77,10 +77,9 @@ export default function Chatbot() {
   const [newMessageIndex, setNewMessageIndex] = useState(-1);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-open chat after 3 seconds (only on desktop)
+  // Auto-open chat after 3 seconds on desktop only
   useEffect(() => {
-    const isDesktop = window.innerWidth >= 640;
-    if (isDesktop) {
+    if (window.innerWidth >= 1024) {
       const timer = setTimeout(() => {
         setIsOpen(true);
         setShowPulse(false);
@@ -181,13 +180,13 @@ export default function Chatbot() {
   return (
     <div
       className={`fixed z-50 transition-all duration-200 
-        bottom-0 right-0 w-full h-full
-        sm:bottom-6 sm:right-6 sm:w-[420px] sm:h-auto
+        bottom-3 right-3 left-3 h-[70vh]
+        sm:bottom-6 sm:right-6 sm:left-auto sm:w-[420px] sm:h-auto
         ${isClosing ? "opacity-0 translate-y-4 scale-95" : "animate-chat-open"}`}
     >
-      <div className="bg-white dark:bg-zinc-900 sm:rounded-2xl shadow-2xl border border-border flex flex-col h-full sm:h-[520px] overflow-hidden">
+      <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-border flex flex-col h-full sm:h-[520px] overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-primary to-primary/85 px-5 py-4 flex items-center justify-between shrink-0 sm:rounded-t-2xl">
+        <div className="bg-gradient-to-r from-primary to-primary/85 px-5 py-4 flex items-center justify-between shrink-0 rounded-t-2xl">
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
               <ChurchAIIcon size={20} className="text-white" />
@@ -278,7 +277,7 @@ export default function Chatbot() {
         )}
 
         {/* Input */}
-        <div className="px-4 py-3 border-t border-border bg-white dark:bg-zinc-900 shrink-0 sm:rounded-b-2xl">
+        <div className="px-4 py-3 border-t border-border bg-white dark:bg-zinc-900 shrink-0 rounded-b-2xl">
           <div className="flex gap-2">
             <Input
               value={input}
