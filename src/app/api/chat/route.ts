@@ -179,6 +179,7 @@ async function fetchUpcomingEvents(baseUrl: string): Promise<string> {
         day: "numeric",
         month: "long",
         year: "numeric",
+        timeZone: "Australia/Sydney",
       });
       const timeStr = startDate.toLocaleTimeString("en-AU", {
         hour: "numeric",
@@ -204,7 +205,7 @@ Key information:
 - Parsonage: 3 Reservoir Rd, Blacktown NSW 2148, Australia
 - The church is part of the Mar Thoma Syrian Church tradition
 - Donations can be made at: https://sydneymarthomachurch.square.site/
-- Website: https://sydneymarthomachurch.church
+- Website: https://sydneymarthoma.church
 
 ABOUT THE CHURCH:
 ${aboutContext}
@@ -229,8 +230,9 @@ IMPORTANT RULES:
 - Use the CONTACT DETAILS, VICAR/CLERGY DETAILS, LEADERSHIP, ABOUT, and MINISTRIES data above to answer questions about the church.
 - If the data doesn't contain what the visitor is asking about, say "I don't have that information right now. Please check our website or contact the church directly."
 - NEVER make up or guess service times, dates, contact numbers, or other details.
+- When listing service times, use EXACTLY the day and date shown in the events data. Do not change Saturday to Sunday or vice versa.
 - Be concise, warm, and welcoming.
-- Keep responses to 1-3 short sentences. Do NOT list multiple events unless specifically asked.
+- Keep responses to 1-3 short sentences unless the visitor asks to list all services.
 - When asked about a single service, give just that one service's date and time.`;
 }
 
@@ -275,7 +277,7 @@ export async function POST(request: NextRequest) {
           ...messages.slice(-10),
         ],
         max_tokens: 800,
-        temperature: 0.7,
+        temperature: 0.3,
       }),
     });
 
