@@ -232,7 +232,12 @@ export default function Chatbot() {
                       : "bg-white dark:bg-zinc-800 text-foreground shadow-sm border border-border/50 rounded-bl-md"
                   }`}
                 >
-                  {msg.content}
+                  {msg.content.split("\n").map((line, idx) => (
+                    <span key={idx}>
+                      {line}
+                      {idx < msg.content.split("\n").length - 1 && <br />}
+                    </span>
+                  ))}
                 </div>
                 {msg.role === "user" && (
                   <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-1">
