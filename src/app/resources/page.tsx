@@ -25,6 +25,7 @@ export default function ResourcesPage() {
         subText: "Download forms and documents",
         imageSrc: "/images/church1.jpeg",
         altText: "Resources",
+        size: "compact",
       }}
       breadcrumbItems={[
         { label: "Home", href: "/" },

@@ -46,6 +46,7 @@ export default function Page() {
         altText="Bethel Mar Thoma Church Sydney Altar"
         title="Leadership"
         subText="Bethel Mar Thoma Church Sydney has been blessed with dedicated vicars and leaders who have guided our congregation with wisdom and compassion. We honor their service and the lasting impact they have made on our community."
+        size="compact"
       />
 
       {/* Breadcrumb */}

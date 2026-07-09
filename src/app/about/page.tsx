@@ -46,6 +46,7 @@ export default function AboutPage() {
         altText: "Bethel Mar Thoma Church Sydney Altar",
         title: "About Us",
         subText: "Learn more about our church, its history, and our mission.",
+        size: "compact",
       }}
       loading={loading}
       breadcrumbItems={[{ label: "Home", href: "/" }, navUrl("About")]}

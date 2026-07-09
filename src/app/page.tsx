@@ -116,43 +116,6 @@ export default function Home() {
         title: "Welcome to Bethel Mar Thoma Church Sydney",
         subText:
           "A community of faith, hope, and love. Join us in worship and fellowship.",
-        children: (
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              href={
-                navigationMenu.find(
-                  (item: NavigationMenuItem) =>
-                    item.label === "Worship and Events",
-                )?.url || ""
-              }
-              passHref
-            >
-              <Button
-                size="lg"
-                className="bg-white text-primary hover:bg-white/90"
-              >
-                Sunday Service Times
-              </Button>
-            </Link>
-            <Link
-              href={
-                navigationMenu
-                  .find((item: NavigationMenuItem) => item.label === "About")
-                  ?.subMenu?.find((subItem) => subItem.label === "Our Church")
-                  ?.url || ""
-              }
-              passHref
-            >
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-zinc-600 border-white hover:bg-zinc-300"
-              >
-                Learn More
-              </Button>
-            </Link>
-          </div>
-        ),
       }}
       loading={loading}
       breadcrumbItems={[{ label: "Home", href: "/" }, navUrl("About")]}

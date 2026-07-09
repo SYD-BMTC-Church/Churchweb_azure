@@ -6,6 +6,7 @@ export interface HeroSectionProps {
   altText: string;
   title: string;
   subText: string;
+  size?: "full" | "compact";
   children?: React.ReactNode;
 }
 export default function HeroSection({
@@ -13,16 +14,11 @@ export default function HeroSection({
   altText,
   title,
   subText,
+  size = "full",
   children,
-}: {
-  imageSrc: string;
-  altText: string;
-  title: string;
-  subText: string;
-  children?: React.ReactNode;
-}) {
+}: HeroSectionProps) {
   return (
-    <section className="relative h-[70vh] w-full">
+    <section className={`relative w-full ${size === "compact" ? "h-[50vh]" : "h-[65vh]"}`}>
       <div className="absolute inset-0 bg-black/50 z-10" />
       {imageSrc ? (
         <Image

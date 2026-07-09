@@ -36,6 +36,7 @@ export default function MinistryContent({ pageTitle }: { pageTitle: string }) {
           subText: Content.HeroTitle,
           imageSrc: Content.Image,
           altText: `${pageTitle} at Bethel Mar Thoma Church Sydney`,
+          size: "compact",
         }}
         breadcrumbItems={[{ label: "Home", href: "/" }, navUrl(`${pageTitle}`)]}
       >
