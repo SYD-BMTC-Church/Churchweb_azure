@@ -57,17 +57,65 @@ export default function MinistryContent({ pageTitle }: { pageTitle: string }) {
 }
 
 function ContactSection({ content }: { content: string }) {
-  {
-    /* Contact Section */
-  }
+  // Parse markdown with #### Area headers followed by name and phone link
+  const parseContacts = (text: string) => {
+    if (!text) return null;
+
+    const regex = /####\s*(.+?)\s*\n\s*(.+?)\s*\[([^\]]+)\]\(tel:([^)]+)\)/g;
+    const contacts: { area: string; name: string; phone: string; tel: string }[] = [];
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+      contacts.push({
+        area: match[1].trim(),
+        name: match[2].trim(),
+        phone: match[3].trim(),
+        tel: match[4].trim(),
+      });
+    }
+
+    return contacts.length > 0 ? contacts : null;
+  };
+
+  const contacts = parseContacts(content);
+
   return (
     <section className="pt-12 bg-background">
       <div className="container mx-auto">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-primary mb-6">Contact</h2>
           <Card>
-            <CardContent className="prose prose-sm max-w-none text-muted-foreground">
-              <MDXRenderer markdown={content} />
+            <CardContent>
+              {contacts ? (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b-2 border-primary/20">
+                        <th className="py-3 px-4 font-semibold text-primary">Area</th>
+                        <th className="py-3 px-4 font-semibold text-primary">Coordinator</th>
+                        <th className="py-3 px-4 font-semibold text-primary">Phone</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {contacts.map((contact, idx) => (
+                        <tr key={idx} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                          <td className="py-3 px-4 font-medium text-foreground">{contact.area}</td>
+                          <td className="py-3 px-4 text-muted-foreground">{contact.name}</td>
+                          <td className="py-3 px-4">
+                            <a href={`tel:${contact.tel}`} className="text-primary underline hover:text-primary/80">
+                              {contact.phone}
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="prose prose-sm max-w-none text-muted-foreground">
+                  <MDXRenderer markdown={content} />
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
