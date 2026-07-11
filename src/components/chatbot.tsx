@@ -154,7 +154,7 @@ export default function Chatbot() {
       <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3">
         {/* Label - desktop: beside button */}
         <div className="hidden sm:block bg-white dark:bg-zinc-800 px-4 py-2 rounded-full shadow-lg border border-border animate-fade-slide-up">
-          <span className="text-sm font-medium text-foreground">AI Assistant</span>
+          <span className="text-sm font-medium text-foreground">Church AI</span>
         </div>
         {/* Chat button with mobile label below */}
         <div className="relative flex flex-col items-center">
@@ -173,8 +173,8 @@ export default function Chatbot() {
             <ChurchAIIcon size={28} className="text-white" />
           </Button>
           {/* Mobile label - below button */}
-          <span className="sm:hidden mt-1 text-[10px] font-semibold text-primary bg-white px-2 py-0.5 rounded-full shadow-sm border border-border">
-            AI Assistant
+          <span className="sm:hidden mt-1 text-[8px] font-semibold text-primary bg-white px-2 py-0.5 rounded-full shadow-sm border border-border">
+            Church AI
           </span>
         </div>
       </div>

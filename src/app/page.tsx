@@ -238,87 +238,88 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-center mb-12 text-primary">
             Find Us
           </h2>
-          <div className="flex flex-col md:flex-row gap-8">
-            <div className="md:w-1/2">
-              <div className="h-full bg-muted rounded-lg overflow-hidden">
-                <iframe
-                  src={churchAddress.iframeSrc}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Church Location"
-                />
-              </div>
-            </div>
-            <div className="md:w-1/2">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <MapPin size={20} className="text-primary" />
-                    Our Location
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Link href={churchAddress.MapLink} target="_blank">
-                    <p className="font-medium">{churchAddress.AddressTitle}</p>
-                    {churchAddress.Address.split(", ").map((line) => (
-                      <p key={line} className="text-primary underline">
-                        {line},
-                      </p>
-                    ))}
-                  </Link>
-                </CardContent>
-                <Separator className="my-4" />
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Contact size={20} className="text-primary" />
-                    Contact
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p>
-                    {"Phone: "}
-                    <Link
-                      className="text-primary underline"
-                      href={`tel:${contact.Phone}`}
-                    >
-                      {contact.Phone}
-                    </Link>
-                  </p>
-                  <p>
-                    {"Email: "}
-                    <Link
-                      className="text-primary underline"
-                      href={`mailto:${contact.Email}`}
-                    >
-                      {contact.Email}
-                    </Link>
-                  </p>
-                  <p>
-                    {`${parsonageAddress.AddressTitle}: `}
-                    <Link
-                      className="text-primary underline"
-                      href={parsonageAddress.MapLink}
-                    >
-                      {parsonageAddress.Address}
-                    </Link>
-                  </p>
-                </CardContent>
-                <CardFooter>
-                  <Link
-                    className="w-full"
-                    href={churchAddress.MapLink}
-                    target="_blank"
-                    passHref
-                  >
-                    <Button className="w-full">Get Directions</Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Church Location */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin size={20} className="text-primary" />
+                  Church Location
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="h-48 md:h-64 bg-muted rounded-lg overflow-hidden">
+                  <iframe
+                    src={churchAddress.iframeSrc}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Church Location"
+                  />
+                </div>
+                <Link href={churchAddress.MapLink} target="_blank">
+                  <p className="font-medium mt-2">{churchAddress.AddressTitle}</p>
+                  <p className="text-primary underline text-sm">{churchAddress.Address}</p>
+                </Link>
+              </CardContent>
+              <CardFooter>
+                <Link className="w-full" href={churchAddress.MapLink} target="_blank" passHref>
+                  <Button className="w-full" variant="outline">Get Directions</Button>
+                </Link>
+              </CardFooter>
+            </Card>
+
+            {/* Parsonage */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin size={20} className="text-primary" />
+                  Parsonage
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="h-48 md:h-64 bg-muted rounded-lg overflow-hidden">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3315.0!2d150.9063!3d-33.771!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b129838f598c54d%3A0x2e7e1e2d9f8b4a0!2s3+Reservoir+Rd%2C+Blacktown+NSW+2148!5e0!3m2!1sen!2sau"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Parsonage Location"
+                  />
+                </div>
+                <Link href={parsonageAddress.MapLink} target="_blank">
+                  <p className="font-medium mt-2">{parsonageAddress.AddressTitle}</p>
+                  <p className="text-primary underline text-sm">{parsonageAddress.Address}</p>
+                </Link>
+              </CardContent>
+              <CardFooter>
+                <Link className="w-full" href={parsonageAddress.MapLink} target="_blank" passHref>
+                  <Button className="w-full" variant="outline">Get Directions</Button>
+                </Link>
+              </CardFooter>
+            </Card>
+          </div>
+
+          {/* Contact Info */}
+          <div className="max-w-md mx-auto mt-8 text-center">
+            <p>
+              {"Phone: "}
+              <Link className="text-primary underline" href={`tel:${contact.Phone}`}>
+                {contact.Phone}
+              </Link>
+            </p>
+            <p>
+              {"Email: "}
+              <Link className="text-primary underline" href={`mailto:${contact.Email}`}>
+                {contact.Email}
+              </Link>
+            </p>
           </div>
         </div>
       </section>
