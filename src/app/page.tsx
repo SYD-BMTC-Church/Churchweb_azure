@@ -233,22 +233,16 @@ export default function Home() {
       <Separator />
 
       {/* Location Section */}
-      <section className="pt-12 bg-muted/30">
+      <section className="pt-12 pb-12 bg-muted/30">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-primary">
-            Find Us
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Church Location */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin size={20} className="text-primary" />
-                  Church Location
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="h-48 md:h-64 bg-muted rounded-lg overflow-hidden">
+          <Card className="p-6 md:p-10 shadow-lg border-primary/10">
+            <h2 className="text-3xl font-bold text-center mb-10 text-primary">
+              Find Us
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Church Location */}
+              <div className="border border-border rounded-xl overflow-hidden">
+                <div className="h-48 md:h-64">
                   <iframe
                     src={churchAddress.iframeSrc}
                     width="100%"
@@ -260,28 +254,21 @@ export default function Home() {
                     title="Church Location"
                   />
                 </div>
-                <Link href={churchAddress.MapLink} target="_blank">
-                  <p className="font-medium mt-2">{churchAddress.AddressTitle}</p>
-                  <p className="text-primary underline text-sm">{churchAddress.Address}</p>
-                </Link>
-              </CardContent>
-              <CardFooter>
-                <Link className="w-full" href={churchAddress.MapLink} target="_blank" passHref>
-                  <Button className="w-full" variant="outline">Get Directions</Button>
-                </Link>
-              </CardFooter>
-            </Card>
+                <div className="p-4 space-y-2">
+                  <h3 className="font-semibold text-primary flex items-center gap-2">
+                    <MapPin size={16} />
+                    Church Location
+                  </h3>
+                  <p className="text-sm text-muted-foreground">{churchAddress.Address}</p>
+                  <Link href={churchAddress.MapLink} target="_blank" passHref>
+                    <Button size="sm" variant="outline" className="w-full mt-2">Get Directions</Button>
+                  </Link>
+                </div>
+              </div>
 
-            {/* Parsonage */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin size={20} className="text-primary" />
-                  Parsonage
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="h-48 md:h-64 bg-muted rounded-lg overflow-hidden">
+              {/* Parsonage */}
+              <div className="border border-border rounded-xl overflow-hidden">
+                <div className="h-48 md:h-64">
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3315.0!2d150.9063!3d-33.771!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b129838f598c54d%3A0x2e7e1e2d9f8b4a0!2s3+Reservoir+Rd%2C+Blacktown+NSW+2148!5e0!3m2!1sen!2sau"
                     width="100%"
@@ -293,34 +280,36 @@ export default function Home() {
                     title="Parsonage Location"
                   />
                 </div>
-                <Link href={parsonageAddress.MapLink} target="_blank">
-                  <p className="font-medium mt-2">{parsonageAddress.AddressTitle}</p>
-                  <p className="text-primary underline text-sm">{parsonageAddress.Address}</p>
-                </Link>
-              </CardContent>
-              <CardFooter>
-                <Link className="w-full" href={parsonageAddress.MapLink} target="_blank" passHref>
-                  <Button className="w-full" variant="outline">Get Directions</Button>
-                </Link>
-              </CardFooter>
-            </Card>
-          </div>
+                <div className="p-4 space-y-2">
+                  <h3 className="font-semibold text-primary flex items-center gap-2">
+                    <MapPin size={16} />
+                    Parsonage
+                  </h3>
+                  <p className="text-sm text-muted-foreground">{parsonageAddress.Address}</p>
+                  <Link href={parsonageAddress.MapLink} target="_blank" passHref>
+                    <Button size="sm" variant="outline" className="w-full mt-2">Get Directions</Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
 
-          {/* Contact Info */}
-          <div className="max-w-md mx-auto mt-8 text-center">
-            <p>
-              {"Phone: "}
-              <Link className="text-primary underline" href={`tel:${contact.Phone}`}>
-                {contact.Phone}
-              </Link>
-            </p>
-            <p>
-              {"Email: "}
-              <Link className="text-primary underline" href={`mailto:${contact.Email}`}>
-                {contact.Email}
-              </Link>
-            </p>
-          </div>
+            {/* Contact Info */}
+            <Separator className="my-8" />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-center">
+              <div className="flex items-center gap-2">
+                <Contact size={18} className="text-primary" />
+                <Link className="text-primary underline font-medium" href={`tel:${contact.Phone}`}>
+                  {contact.Phone}
+                </Link>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin size={18} className="text-primary" />
+                <Link className="text-primary underline font-medium" href={`mailto:${contact.Email}`}>
+                  {contact.Email}
+                </Link>
+              </div>
+            </div>
+          </Card>
         </div>
       </section>
     </PageLayout>
