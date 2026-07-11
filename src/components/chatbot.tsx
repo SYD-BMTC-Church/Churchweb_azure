@@ -151,10 +151,10 @@ export default function Chatbot() {
 
   if (!isOpen) {
     return (
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
-        {/* Tooltip */}
-        <div className="text-sm text-primary font-medium px-2 py-1 animate-fade-slide-up">
-          <span>✝️ Church Assistant</span>
+      <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3">
+        {/* Label */}
+        <div className="bg-white dark:bg-zinc-800 px-4 py-2 rounded-full shadow-lg border border-border animate-fade-slide-up">
+          <span className="text-sm font-medium text-foreground">AI Assistant</span>
         </div>
         {/* Chat button */}
         <div className="relative">
@@ -166,7 +166,7 @@ export default function Chatbot() {
               setIsOpen(true);
               setShowPulse(false);
             }}
-            className="relative h-14 w-14 rounded-full shadow-xl bg-gradient-to-br from-primary to-primary/80 hover:scale-110 active:scale-95 transition-all duration-200"
+            className="relative h-14 w-14 rounded-full shadow-xl bg-gradient-to-br from-primary to-primary/80 hover:scale-110 active:scale-95 transition-all duration-200 ring-4 ring-white dark:ring-zinc-900"
             size="icon"
             aria-label="Open chat"
           >

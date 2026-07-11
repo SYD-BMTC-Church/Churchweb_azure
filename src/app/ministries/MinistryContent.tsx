@@ -87,29 +87,44 @@ function ContactSection({ content }: { content: string }) {
           <Card>
             <CardContent>
               {contacts ? (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="border-b-2 border-primary/20">
-                        <th className="py-3 px-4 font-semibold text-primary">Area</th>
-                        <th className="py-3 px-4 font-semibold text-primary">Coordinator</th>
-                        <th className="py-3 px-4 font-semibold text-primary">Phone</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {contacts.map((contact, idx) => (
-                        <tr key={idx} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                          <td className="py-3 px-4 font-medium text-foreground">{contact.area}</td>
-                          <td className="py-3 px-4 text-muted-foreground">{contact.name}</td>
-                          <td className="py-3 px-4">
-                            <a href={`tel:${contact.tel}`} className="text-primary underline hover:text-primary/80">
-                              {contact.phone}
-                            </a>
-                          </td>
+                <div>
+                  {/* Desktop table */}
+                  <div className="hidden md:block overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="border-b-2 border-primary/20">
+                          <th className="py-3 px-4 font-semibold text-primary">Area</th>
+                          <th className="py-3 px-4 font-semibold text-primary">Coordinator</th>
+                          <th className="py-3 px-4 font-semibold text-primary">Phone</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {contacts.map((contact, idx) => (
+                          <tr key={idx} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                            <td className="py-3 px-4 font-medium text-foreground">{contact.area}</td>
+                            <td className="py-3 px-4 text-muted-foreground">{contact.name}</td>
+                            <td className="py-3 px-4">
+                              <a href={`tel:${contact.tel}`} className="text-primary underline hover:text-primary/80">
+                                {contact.phone}
+                              </a>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {/* Mobile cards */}
+                  <div className="md:hidden space-y-3">
+                    {contacts.map((contact, idx) => (
+                      <div key={idx} className="border border-border/50 rounded-lg p-4 text-left hover:bg-muted/30 transition-colors">
+                        <p className="font-semibold text-primary text-sm">{contact.area}</p>
+                        <p className="text-foreground mt-1">{contact.name}</p>
+                        <a href={`tel:${contact.tel}`} className="text-primary underline text-sm mt-1 inline-block">
+                          {contact.phone}
+                        </a>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ) : (
                 <div className="prose prose-sm max-w-none text-muted-foreground">
