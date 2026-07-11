@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# large/unnecessary files
+*.msi
+*.zip
+deployment-full/
+deployment-linux/
+deployment-manual/
+deployment-regular/
+deployment-standalone/
+deployment-package-test/
+temp-check/
